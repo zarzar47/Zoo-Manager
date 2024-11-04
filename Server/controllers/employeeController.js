@@ -11,4 +11,17 @@ async function getAllEmployees(req, res) {
   }
 }
 
-module.exports = { getAllEmployees };
+async function getEmployee(req, res) {
+  const { id } = req.body;
+  try {
+    const employees = await listAllEmployees();
+    const employee = employees.find((employee) => employee[0] === id);
+    res.json({ data: employee });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: `Error fetching employee, error code ${err}` });
+  }
+}
+
+module.exports = { getAllEmployees, getEmployee };

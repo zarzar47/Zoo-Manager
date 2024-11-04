@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
-import EmployeeList from "./components/EmployeeList";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./components/Login/LoginPage";
+import ManagerDashboard from "./components/Dashboards/ManagerDashboard";
+import EmployeeDashboard from "./components/Dashboards/EmployeeDashboard";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  const [backendData, setbackendData] = useState([{}]);
-
-  // useEffect(() => {
-  //   fetch("/api")
-  //     .then((response) => response.json)
-  //     .then((data) => {
-  //       setbackendData(data);
-  //     });
-  // }, []);
-  useEffect(() => {
-    fetch("http://localhost:3001/api/employees", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.data);
-        const sortedData = data.data.sort((a, b) => {
-          if (a[0] < b[0]) return -1;
-          if (a[0] > b[0]) return 1;
-          return 0;
-        });
-        setbackendData(sortedData);
-      })
-      .catch((error) =>
-        console.error("Error fetching employee data results:", error)
-      );
-  }, []);
   return (
-    <div>
-      <h1>Zoo manager</h1>
-      <EmployeeList employees={backendData} />
-    </div>
+    <Router>
+      <div className="container mt-5">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/ManagerDashboard" element={<ManagerDashboard />} />
+          <Route path="/EmployeeDashboard" element={<EmployeeDashboard />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -1,10 +1,10 @@
 const oracledb = require("oracledb");
 
-async function listAllEmployees() {
+async function listAllProjects() {
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT * FROM employees`);
+    const result = await conn.execute(`SELECT * FROM projects`);
     return result.rows;
   } catch (err) {
     throw err;
@@ -15,11 +15,7 @@ async function listAllEmployees() {
   }
 }
 
-module.exports = {
-  listAllEmployees,
-};
-
-async function numEmployees() {
+async function numProjects() {
   let conn;
   try {
     conn = await oracledb.getConnection();
@@ -35,6 +31,6 @@ async function numEmployees() {
 }
 
 module.exports = {
-  listAllEmployees,
-  numEmployees,
+  listAllProjects,
+  numProjects,
 };
