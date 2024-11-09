@@ -5,6 +5,7 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const ProjectRoutes = require("./routes/ProjectRoutes");
 const TaskRoutes = require("./routes/TaskRoutes");
 const authRoutes = require("./routes/authRoutes");
+const managerRoutes = require("./routes/managerRoutes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./config/db");
@@ -29,23 +30,12 @@ app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
-// function ensureAuthenticated(req, res, next) {
-//   if (req.session.userId) {
-//     next();
-//   } else {
-//     res.status(401).send("You need to log in to view this page.");
-//   }
-// }
-
-// app.get("/api", ensureAuthenticated, (req, res) => {
-//   const user = users.find((u) => u.id === req.session.userId);
-//   res.send(`Welcome to your dashboard, ${user.username}!`);
-// });
 
 app.use("/api", employeeRoutes);
 app.use("/api", ProjectRoutes);
 app.use("/api", TaskRoutes);
 app.use("/api", authRoutes);
+app.use("/api/Manager", managerRoutes);
 
 // Start Server and DB
 // if the port is specified in the env file then it is used orelse 5000 is used as the port

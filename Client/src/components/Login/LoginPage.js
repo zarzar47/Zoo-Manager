@@ -4,7 +4,7 @@ import ManagerDashboard from "../Dashboards/ManagerDashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
@@ -27,9 +27,10 @@ function Login() {
         console.log(
           data.message + " with status " + data.status + " and ID " + data.id
         );
-        if (data.status == "employee")
+        if (data.status == "E")
           navigate("EmployeeDashboard", { state: { userId: data.id } });
-        else if (data.status == "manager") navigate("ManagerDashboard");
+        else if (data.status == "M")
+          navigate("ManagerDashboard", { state: { userId: data.id } });
       } else {
         const errorData = await response.json();
         console.log(errorData.message);
@@ -45,13 +46,13 @@ function Login() {
       <h2 className="mb-4">Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group mb-3">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="email">email</label>
           <input
             type="text"
             className="form-control"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>

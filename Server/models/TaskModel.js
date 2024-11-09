@@ -49,8 +49,29 @@ async function empTask(emp_id) {
   }
 }
 
+async function ManagerTask(MANAGER_ID) {
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(
+      `select task_id, task_desc, assigned_time, reserveId, urgency from assignments
+        inner join employees using (emp_id) 
+        inner join tasks using (task_id)
+        WHERE MANAGER_ID = ${MANAGER_ID}`
+    );
+    return result;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
 module.exports = {
   listAllTasks,
   numTasks,
   empTask,
+  ManagerTask,
 };

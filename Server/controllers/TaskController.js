@@ -1,5 +1,5 @@
 const { listAllTasks, empTask } = require("../models/TaskModel");
-
+const { ManagerTask } = require("../models/TaskModel");
 async function getAllTasks(req, res) {
   try {
     const tasks = await listAllTasks();
@@ -23,4 +23,16 @@ async function getEmployeeTasks(req, res) {
   }
 }
 
-module.exports = { getAllTasks, getEmployeeTasks };
+async function getManagerTasks(req, res) {
+  const { id } = req.body;
+  try {
+    const empTasks = await ManagerTask(id);
+    res.json({ data: empTasks.rows });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: `Error fetching Tasks, error code ${err}` });
+  }
+}
+
+module.exports = { getAllTasks, getEmployeeTasks, getManagerTasks };

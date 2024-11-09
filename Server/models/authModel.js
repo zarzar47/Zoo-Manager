@@ -1,13 +1,20 @@
 const oracledb = require("oracledb");
 
-const users = [
-  { id: 3, username: "user1", password: "pass1", status: "employee" },
-  { id: 2, username: "user2", password: "pass2", status: "manager" },
-  { id: 1, username: "John Doe", password: "pass3", status: "employee" },
-];
-
-async function UserExists({ username }) {
-  return users.find((user) => user.username === username);
+async function UserExists({ email }) {
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(
+      `SELECT * FROM LoginDatabase WHERE email = '${email}'`
+    );
+    return result.rows[0];
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
 }
 
 module.exports = { UserExists };

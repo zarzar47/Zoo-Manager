@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const EmployeeList = ({ employees }) => {
+  console.log("Employee info: " + employees);
   return (
     <div className="container mt-1 align-items-center">
       <h1 style={{ fontSize: "1.5rem" }}>Employees</h1>

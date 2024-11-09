@@ -1,4 +1,8 @@
-const { listAllEmployees } = require("../models/EmployeeModel");
+const {
+  listAllEmployees,
+  FindManager,
+  listManagerEmployees,
+} = require("../models/EmployeeModel");
 
 async function getAllEmployees(req, res) {
   try {
@@ -24,4 +28,33 @@ async function getEmployee(req, res) {
   }
 }
 
-module.exports = { getAllEmployees, getEmployee };
+async function findManagedEmployees(req, res) {
+  const { id } = req.body;
+  try {
+    const employees = await listManagerEmployees(id);
+    res.status(200).json({ data: employees });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ error: "An error occurred during manager employee search up" });
+  }
+}
+
+async function findManagerInfo(req, res) {
+  const { id } = req.body;
+  try {
+    const manager = await FindManager(id);
+    res.status(200).json({ data: manager });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ error: "An error occurred during manager info search up" });
+  }
+}
+
+module.exports = {
+  getAllEmployees,
+  getEmployee,
+  findManagedEmployees,
+  findManagerInfo,
+};

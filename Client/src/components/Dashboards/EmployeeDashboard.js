@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 function EmployeeDashboard() {
   // States to store current employee information and their tasks
-  const [employee, setEmployee] = useState({ name: "", email: "" });
+  const [employee, setEmployee] = useState({ id: 0, name: "", email: "" });
   const [taskData, setTaskData] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
