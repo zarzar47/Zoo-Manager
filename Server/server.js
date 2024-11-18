@@ -10,32 +10,52 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./config/db");
 
+
+app.use(cors({ origin: "http://localhost:3000" , credentials: true,}));
+
+function ensureAuthenticated(req, res, next) {
+  if (req.path.startsWith("/auth")){
+    return next();
+  }
+
+  if (!req.session.user) {
+    console.log("Redirected");
+    res.status(401).json({ redirect: "http://localhost:3000/" });
+  }
+
+  return next();
+}
+
 app.use(
   session({
-    secret: "your-secret-key",
+    name: "Authenticator",
+    secret: "Rafay2Good",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 },
+    cookie: { secure: false, httpOnly: true},
   })
 );
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-});
-
-app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api", employeeRoutes);
-app.use("/api", ProjectRoutes);
-app.use("/api", TaskRoutes);
-app.use("/api", authRoutes);
-app.use("/api/Manager", managerRoutes);
+app.get("/api/session-debug", (req, res) => {
+  res.json({session: req.session});
+})
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "*");
+//   next();
+// });
+
+app.use("/api", ensureAuthenticated, employeeRoutes);
+app.use("/api", ensureAuthenticated, ProjectRoutes);
+app.use("/api", ensureAuthenticated, TaskRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/Manager", ensureAuthenticated, managerRoutes);
 
 // Start Server and DB
 // if the port is specified in the env file then it is used orelse 5000 is used as the port

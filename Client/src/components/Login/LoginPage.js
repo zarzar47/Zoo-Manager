@@ -14,14 +14,16 @@ function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3001/api/login", {
+      const response = await fetch("http://localhost:3001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
-
+      
+      // console.log(JSON.stringify(response));
       if (response.ok) {
         const data = await response.json();
         console.log(

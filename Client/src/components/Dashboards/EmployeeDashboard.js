@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TaskList from "./TaskList"; // Component to display list of tasks
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function EmployeeDashboard() {
   // States to store current employee information and their tasks
@@ -10,21 +11,28 @@ function EmployeeDashboard() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const userId = location.state?.userId;
+  const navigate = useNavigate();
 
   const fetchEmployeeData = async () => {
     try {
-      const employeeResponse = await fetch(
+      const response = await fetch(
         "http://localhost:3001/api/getemployee",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ id: userId }),
         }
       );
+      if (response.status === 401){
+        response.json().then((data) => {
+          window.location.href = data.redirect;
+        })
+      }
 
-      const employeeInfo = await employeeResponse.json();
+      const employeeInfo = await response.json();
       const id = employeeInfo.data[0];
       setEmployee({
         id: employeeInfo.data[0],
@@ -37,6 +45,7 @@ function EmployeeDashboard() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ id: id }),
       });
 
@@ -63,11 +72,16 @@ function EmployeeDashboard() {
 
   return (
     <div className="container p-3">
-      <div className="d-flex justify-content-between align-items-center bg-primary text-white p-2 mb-3 rounded">
-        <div>
-          <h5 className="mb-0">{employee.name}</h5>
+      <button className="btn btn-primary" onClick={() => {
+          navigate("/");
+          fetch("http://localhost:3001/api/auth/logout", {
+            method: "GET",
+            credentials: "include",
+          })
+        }}>Log out</button>
+      <div className="d-flex justify-content-between align-items-center p-2 mb-3 rounded">
+          <h5 className=" text-center mb-0">{employee.name}</h5>
           <small>{employee.email}</small>
-        </div>
       </div>
 
       <div className="card">
