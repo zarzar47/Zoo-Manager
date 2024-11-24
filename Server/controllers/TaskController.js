@@ -6,8 +6,7 @@ async function getAllTasks(req, res) {
     res.json({ data: tasks });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching Projects, error code ${err}` });
+      .status(500);
   }
 }
 
@@ -18,8 +17,7 @@ async function getEmployeeTasks(req, res) {
     res.json({ data: empTasks.rows });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching Tasks, error code ${err}` });
+      .status(500);
   }
 }
 
@@ -30,8 +28,7 @@ async function getManagerTasks(req, res) {
     res.json({ data: empTasks.rows });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching Tasks, error code ${err}` });
+      .status(500);
   }
 }
 

@@ -10,8 +10,7 @@ async function getAllEmployees(req, res) {
     res.json({ data: employees });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching employees, error code ${err}` });
+      .status(500);
   }
 }
 
@@ -23,8 +22,7 @@ async function getEmployee(req, res) {
     res.json({ data: employee });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching employee, error code ${err}` });
+      .status(500);
   }
 }
 
@@ -35,8 +33,7 @@ async function findManagedEmployees(req, res) {
     res.status(200).json({ data: employees });
   } catch (err) {
     res
-      .status(400)
-      .json({ error: "An error occurred during manager employee search up" });
+      .status(400);
   }
 }
 
@@ -47,8 +44,7 @@ async function findManagerInfo(req, res) {
     res.status(200).json({ data: manager });
   } catch (err) {
     res
-      .status(400)
-      .json({ error: "An error occurred during manager info search up" });
+      .status(400);
   }
 }
 

@@ -17,4 +17,22 @@ async function UserExists({ email }) {
   }
 }
 
-module.exports = { UserExists };
+async function PasswordChange({ email, new_password }) {
+  let conn;
+  oracledb.autoCommit = true;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(
+      `UPDATE LOGINDATABASE SET L_Password = '${new_password}' WHERE email = '${email}'`,
+    );
+    return result;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
+module.exports = { UserExists, PasswordChange };

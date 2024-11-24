@@ -21,6 +21,7 @@ function ensureAuthenticated(req, res, next) {
   if (!req.session.user) {
     console.log("Redirected");
     res.status(401).json({ redirect: "http://localhost:3000/" });
+    return;
   }
 
   return next();

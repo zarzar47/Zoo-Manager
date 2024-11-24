@@ -2,36 +2,37 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Login() {
+function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [new_password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
+
+  const triggerAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3001/api/auth/login", {
+      const response = await fetch("http://localhost:3001/api/auth/changePassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, new_password }),
       });
-
-      // console.log(JSON.stringify(response));
+    
+      if (response.status == 400){
+        console.log("Masla agaya");
+      }
       if (response.ok) {
-        const data = await response.json();
-        console.log(
-          data.message + " with status " + data.status + " and ID " + data.id
-        );
-        if (data.status === "E")
-          navigate("EmployeeDashboard", { state: { userId: data.id } });
-        else if (data.status === "M")
-          navigate("ManagerDashboard", { state: { userId: data.id } });
+        triggerAlert();
       } else {
         const errorData = await response.json();
         console.log(errorData.message);
@@ -55,7 +56,17 @@ function Login() {
         className="card shadow-lg p-4"
         style={{ maxWidth: "auto", borderRadius: "10px" }}
       >
-        <h2 className="text-center mb-4 text-primary">Login</h2>
+        {showAlert && <div
+          className="text-center"
+          style={{
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          Password Successfully changed
+        </div>
+        }
+        <h2 className="text-center mb-4 text-primary">Forgot Password</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
             <label htmlFor="email" className="form-label">
@@ -73,14 +84,14 @@ function Login() {
           </div>
           <div className="form-group mb-3">
             <label htmlFor="password" className="form-label">
-              Password
+              New Password
             </label>
             <input
               type="password"
               className="form-control"
               id="password"
-              placeholder="Enter your password"
-              value={password}
+              placeholder="Enter your new password"
+              value={new_password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -89,19 +100,19 @@ function Login() {
             <div className="alert alert-danger text-center">{error}</div>
           )}
           <button type="submit" className="btn btn-primary w-100">
-            Login
+            Change
           </button>
         </form>
         <div className="mt-3 text-center">
-          <small>
-            <a href="/ForgotPassword" className="text-decoration-none text-primary">
-              Forgot password?
-            </a>
-          </small>
+        <button type="submit" onClick={() => {
+            navigate("/");
+        }} className="btn btn-primary w-100">
+            Go Back
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default ForgotPassword;

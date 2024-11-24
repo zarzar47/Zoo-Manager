@@ -9,8 +9,7 @@ async function getAllProjects(req, res) {
     res.json({ data: projects });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching Projects, error code ${err}` });
+      .status(500);
   }
 }
 
@@ -21,8 +20,7 @@ async function findManagedProjects(req, res) {
     res.status(200).json({ data: projects });
   } catch (err) {
     res
-      .status(500)
-      .json({ message: `Error fetching Projects, error code ${err}` });
+      .status(500);
   }
 }
 

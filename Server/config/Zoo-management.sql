@@ -294,6 +294,7 @@ INSERT INTO COMPLAINTS (
 
 /
 select * from LOGINDATABASE;
+UPDATE LOGINDATABASE SET L_Password = 'Alice3' WHERE email = 'alice.j@example.com';
 SELECT * FROM LoginDatabase WHERE email = 'alice.j@example.com'
 select * from employees where MANAGER_ID = 1;
 select * from PROJECTS;

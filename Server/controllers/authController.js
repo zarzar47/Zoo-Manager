@@ -1,4 +1,4 @@
-const { UserExists } = require("../models/authModel");
+const { UserExists, PasswordChange } = require("../models/authModel");
 
 async function findUser(req, res) {
   const { email, password } = req.body;
@@ -27,4 +27,24 @@ async function findUser(req, res) {
   }
 }
 
-module.exports = { findUser };
+async function changePassword(req, res) {
+  const { email, new_password } = req.body;
+  console.log(req.body);
+  try{
+    const user = await UserExists({ email });
+    if (!user){
+      return res.status(401).json({
+        error: "Invalid email",
+      });
+    }
+    console.log("user exits");
+    const new_user = await PasswordChange({email, new_password});
+    if (new_user.rowsAffected != 0)
+      return res.status(200).json({message: "Password change successful"});
+    else return res.status(400).json({ error: "An error occurred during password change" });
+  } catch (err) {
+    res.status(400).json({ error: "An error occurred during password change" });
+  }
+}
+
+module.exports = { findUser, changePassword };
