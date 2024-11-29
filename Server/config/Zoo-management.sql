@@ -294,8 +294,13 @@ INSERT INTO COMPLAINTS (
 
 /
 select * from LOGINDATABASE;
+UPDATE LOGINDATABASE SET L_Password = 'A' WHERE email = 'alice.j@example.com';
+UPDATE LOGINDATABASE SET L_Password = 'S' WHERE email = 'jane.smith@example.com';
+select * from LOGINDATABASE;
+/*
 UPDATE LOGINDATABASE SET L_Password = 'Alice3' WHERE email = 'alice.j@example.com';
-SELECT * FROM LoginDatabase WHERE email = 'alice.j@example.com'
+
+SELECT * FROM LoginDatabase WHERE email = 'alice.j@example.com';
 select * from employees where MANAGER_ID = 1;
 select * from PROJECTS;
 select * from tasks;
@@ -304,7 +309,7 @@ inner join employees using (emp_id)
 inner join tasks using (task_id)
 WHERE MANAGER_ID = 1;
 select * from projects;
-/
+*/
 --TRUNCATE TABLE LoginDatabase;
 --DROP TABLE LoginDatabase;
 --TRUNCATE TABLE VisitorLogging;

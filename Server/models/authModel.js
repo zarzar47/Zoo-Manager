@@ -7,6 +7,7 @@ async function UserExists({ email }) {
     const result = await conn.execute(
       `SELECT * FROM LoginDatabase WHERE email = '${email}'`
     );
+    console.log(result.rows[0]);
     return result.rows[0];
   } catch (err) {
     throw err;
