@@ -4,7 +4,8 @@ async function findUser(req, res) {
   const { email, password } = req.body;
   try {
     const user = await UserExists({ email });
-
+      console.log(password);
+      console.log(user[2]);
     if (!user || user[2] !== password) {
       return res.status(401).json({
         message: "Invalid username or password",
