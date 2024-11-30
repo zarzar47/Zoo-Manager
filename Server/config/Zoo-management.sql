@@ -43,6 +43,7 @@ CREATE TABLE TASKS (
 	TASK_DESC VARCHAR2(255) NOT NULL,
 	ASSIGNED_TIME DATE NOT NULL,
 	RESERVEID NUMBER(10) NOT NULL,
+	COMPLETED NUMBER(1) DEFAULT 0,
 	CONSTRAINT TSK_FK FOREIGN KEY (RESERVEID) REFERENCES RESERVES(RESERVEID)
 );
 
@@ -292,7 +293,7 @@ INSERT INTO COMPLAINTS (
 	2
 );
 
-/
+/*
 select * from LOGINDATABASE;
 UPDATE LOGINDATABASE SET L_Password = 'A' WHERE email = 'alice.j@example.com';
 UPDATE LOGINDATABASE SET L_Password = 'S' WHERE email = 'jane.smith@example.com';
@@ -310,23 +311,25 @@ inner join tasks using (task_id)
 WHERE MANAGER_ID = 1;
 select * from projects;
 */
---TRUNCATE TABLE LoginDatabase;
---DROP TABLE LoginDatabase;
---TRUNCATE TABLE VisitorLogging;
---DROP TABLE VisitorLogging;
---TRUNCATE TABLE Assignments;
---DROP TABLE Assignments;
---TRUNCATE TABLE Tasks;
---DROP TABLE Tasks;
---TRUNCATE TABLE Reserves;
---DROP TABLE Reserves;
---TRUNCATE TABLE Species;
---DROP TABLE Species;
---TRUNCATE TABLE Complaints;
---DROP TABLE Complaints;
---TRUNCATE TABLE Employees;
---DROP TABLE Employees;
---TRUNCATE TABLE Projects;
---DROP TABLE Projects;
---TRUNCATE TABLE Managers;
---DROP TABLE Managers;
+/*
+TRUNCATE TABLE LoginDatabase;
+DROP TABLE LoginDatabase;
+TRUNCATE TABLE VisitorLogging;
+DROP TABLE VisitorLogging;
+TRUNCATE TABLE Assignments;
+DROP TABLE Assignments;
+TRUNCATE TABLE Tasks;
+DROP TABLE Tasks;
+TRUNCATE TABLE Reserves;
+DROP TABLE Reserves;
+TRUNCATE TABLE Species;
+DROP TABLE Species;
+TRUNCATE TABLE Complaints;
+DROP TABLE Complaints;
+TRUNCATE TABLE Employees;
+DROP TABLE Employees;
+TRUNCATE TABLE Projects;
+DROP TABLE Projects;
+TRUNCATE TABLE Managers;
+DROP TABLE Managers;
+*/

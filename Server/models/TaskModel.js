@@ -35,7 +35,7 @@ async function empTask(emp_id) {
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(
-      `select task_id, task_desc, assigned_time, reserveId, urgency from assignments
+      `select task_id, task_desc, assigned_time, reserveId, urgency, completed from assignments
      inner join employees using (emp_id) 
      inner join tasks using (task_id) where emp_id = ${emp_id}`
     );

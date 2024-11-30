@@ -70,15 +70,18 @@ function EmployeeDashboard() {
   }, []);
 
   const toggleTaskCompletion = (taskId) => {
+    console.log("this is being called")
     setTaskData((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, completed: !task.completed }
-          : task
-      )
+      prevTasks.map((task, index) => {
+        return task[0] === taskId ? [...task.slice(0, 5), !task[5], ...task.slice(6)] : task
+    })
     );
-    if (!completedTasks.includes(taskId)) {
-      setCompletedTasks([...completedTasks, taskId]);
+    if (completedTasks.includes(taskId)) {
+      setCompletedTasks((prevCompletedTasks) =>
+        prevCompletedTasks.filter((id) => id !== taskId)
+      );
+    } else {
+      setCompletedTasks((prevCompletedTasks) => [...prevCompletedTasks, taskId]);
     }
   };
 
@@ -94,19 +97,6 @@ function EmployeeDashboard() {
 
   return (
     <div
-      className="d-flex flex-column"
-      style={{
-        minHeight: "100vh",
-        backgroundImage:
-          background === "forest"
-            ? "url('https://th.bing.com/th/id/R.ee89e33a2de59e747861744dd3aeddd1?rik=FpKQVhPWVAXaPw&riu=http%3a%2f%2fwallpapercave.com%2fwp%2fPJXlT3m.jpg&ehk=4KIKqKYgfLJY4YPAtMespwDXU44zDiNwMjgJptatzrU%3d&risl=&pid=ImgRaw&r=0')"
-            : background === "savannah"
-            ? "url('https://i.pinimg.com/originals/fe/02/4e/fe024e50a71cfd6599841dbb2a144d2c.jpg')"
-            : "url('https://www.kolpaper.com/wp-content/uploads/2020/06/Ocean-4K-Wallpaper.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        color: "#fff",
-      }}
     >
       <div
         className="container p-4 shadow-lg"
@@ -119,7 +109,7 @@ function EmployeeDashboard() {
       >
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h3 className="text-primary mb-0">
-            Hello, {employee.name}! Ready for another productive day?
+            Hello, {employee.name}!
           </h3>
           <button
             className="btn btn-primary"
@@ -135,7 +125,7 @@ function EmployeeDashboard() {
               });
             }}
           >
-            Log out
+            <i className="fas fa-arrow-right"></i>
           </button>
         </div>
 
@@ -195,26 +185,33 @@ function EmployeeDashboard() {
         <div className="card shadow-sm" style={{ borderRadius: "10px" }}>
           <h4 className="card-header text-center text-primary">Your Tasks</h4>
           <div className="card-body">
-            {taskData.map((task) => (
+            {taskData.map((task, index) => (
               <div
-                key={task.id}
+                key={task[0]}
                 className={`d-flex justify-content-between align-items-center mb-2 ${
-                  task.completed ? "text-muted" : ""
+                  task[5] ? "text-muted" : ""
                 }`}
               >
                 <span
                   style={{
-                    textDecoration: task.completed ? "line-through" : "none",
+                    textDecoration: task[5] ? "line-through" : "none",
                   }}
                 >
-                  {task.description}
+                  {task[1]}
                 </span>
-                <button
+                {task[5] ? <button
                   className="btn btn-success btn-sm"
-                  onClick={() => toggleTaskCompletion(task.id)}
+                  onClick={() => toggleTaskCompletion(task[0])}
                 >
                   <i className="fas fa-check"></i>
+                </button> : 
+                  <button
+                  className="btn btn-light btn-sm"
+                  onClick={() => toggleTaskCompletion(task[0])}
+                >
+                  <i className="fas fa-circle"></i>
                 </button>
+                }
               </div>
             ))}
           </div>
@@ -235,18 +232,6 @@ function EmployeeDashboard() {
           }}
         >
           <i className="fas fa-comment"></i>
-        </button>
-
-        {/* Background Toggle Button */}
-        <button
-          className="btn btn-secondary position-fixed"
-          style={{
-            bottom: "10px",
-            right: "10px",
-          }}
-          onClick={toggleBackground}
-        >
-          Change Background
         </button>
       </div>
     </div>
