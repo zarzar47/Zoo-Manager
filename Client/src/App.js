@@ -10,7 +10,6 @@ import ForgotPassword from './components/Login/ForgotPassword';
 function App() {
   return (
     <Router>
-      <div>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/ManagerDashboard" element={<ManagerDashboard />} />
@@ -18,7 +17,6 @@ function App() {
           <Route path="/OwnerDashboard" element={<OwnerDashboard />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
         </Routes>
-      </div>
     </Router>
   );
 }

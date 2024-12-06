@@ -148,7 +148,12 @@ function EmployeeDashboard() {
   }
 
   return (
-    <div className="container p-3">
+    <div className=" p-3"
+      style={{
+        background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
+        minHeight: "100vh",
+      }}
+    >
       {/* Employee Details */}
       <div className="shadow-lg rounded p-4 bg-light mb-4">
         <div className="d-flex justify-content-between align-items-center mb-3">

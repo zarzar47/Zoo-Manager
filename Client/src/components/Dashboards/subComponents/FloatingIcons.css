@@ -1,0 +1,32 @@
+.floating-icons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0 /* Keep the icons behind the main content */
+  }
+  
+  .icon {
+    position: absolute;
+    animation: float 6s ease-in-out infinite; /* Apply floating animation */
+    width: 200px; /* Set the size of the icons */
+    height: 200px;
+    opacity: 0.8; /* Make the icons slightly transparent */
+    object-fit: contain;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0);
+    }
+    50% {
+      transform: translateY(20px) translateX(40px); /* Slight movement */
+    }
+    100% {
+      transform: translateY(0) translateX(0);
+    }
+  }
+  

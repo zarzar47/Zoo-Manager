@@ -5,10 +5,10 @@
 }
 
 .list-group-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1rem;
-border: 1px solid #e0dbdb; /* optional for visual separation */
-border-radius: 8px; /* optional for rounded corners */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #e0dbdb; /* optional for visual separation */
+    border-radius: 8px; /* optional for rounded corners */
 }

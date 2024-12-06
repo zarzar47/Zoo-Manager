@@ -52,9 +52,13 @@ function ManagerDashboard() {
 
   return (
       <div
-        className=" container p-3"
+        className=" p-3 "
+        style = {{
+          background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
+          minHeight: "100vh",
+        }}
       >
-        <div className = "shadow-lg rounded p-4 bg-light mb-4">
+        <div className = "shadow-lg rounded p-4 bg-white mb-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h3 className="text-primary mb-0">{manager[2]}</h3>
             <button
