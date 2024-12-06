@@ -1,0 +1,14 @@
+.list-group {
+    display: grid; /* Using grid for layout */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Grid with auto-width, auto rows */
+    gap: 1rem; /* Adjust gap between employee items */
+}
+
+.list-group-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+border: 1px solid #e0dbdb; /* optional for visual separation */
+border-radius: 8px; /* optional for rounded corners */
+}

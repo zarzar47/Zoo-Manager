@@ -7,15 +7,13 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function ManagerDashboard() {
-  var count = 4;
   const [manager, setManager] = useState({ id: 0, name: "", email: "" });
   const [employeeData, setemployeeData] = useState([]);
   const [projectData, setProjectData] = useState([]);
-  const [taskData, setTaskData] = useState([]);
   const location = useLocation();
   const userId = location.state?.userId;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async (endpoint, setter) => {
     try {
@@ -36,9 +34,6 @@ function ManagerDashboard() {
       const data = await response.json();
       const sortedData = data.data.sort((a, b) => (a[0] < b[0] ? -1 : 1));
       setter(sortedData);
-      count -= 1;
-      console.log(count);
-      if (count < 0) setLoading(false);
     } catch (error) {
       console.error(`Error fetching ${endpoint} data:`, error);
     }
@@ -48,7 +43,7 @@ function ManagerDashboard() {
     fetchData("Manager/", setManager);
     fetchData("Manager/employees", setemployeeData);
     fetchData("Manager/projects", setProjectData);
-    fetchData("Manager/tasks", setTaskData);
+    // fetchData("Manager/tasks", setTaskData);
   }, []);
 
   if (loading) {
@@ -84,12 +79,12 @@ function ManagerDashboard() {
               });
             }}
           >
-            Log out
+            <i className="fas fa-arrow-right"></i>
           </button>
         </div>
 
         <h3 className="text-center mb-4">
-          Welcome Manager! <span className="text-success">{manager[1]}</span>
+          Welcome Manager! <span className="text-success">{manager[2]}</span>
         </h3>
 
         <div className="card shadow-sm p-4" style={{ borderRadius: "10px" }}>
@@ -98,15 +93,9 @@ function ManagerDashboard() {
             <ProjectList Projects={projectData} />
           </div>
 
-          <div className="row">
-            <div className="col-md-6 mb-3">
+          <div className="col">
               <h4 className="text-primary">Employees</h4>
               <EmployeeList employees={employeeData} />
-            </div>
-            <div className="col-md-6">
-              <h4 className="text-primary">Tasks</h4>
-              <TaskList Tasks={taskData} />
-            </div>
           </div>
         </div>
       </div>

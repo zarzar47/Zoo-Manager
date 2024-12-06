@@ -1,28 +1,37 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {Project } from "../../classes/Classes"
 
 const ProjectList = ({ Projects }) => {
   return (
     <div className="container mt-1 align-items-center">
-      <h1 style={{ fontSize: "1.5rem" }}>Projects</h1>
       {Projects.length > 0 ? (
         <ul className="list-group">
           {Projects.map((Project, index) => (
             <li
               key={index}
-              className="list-group-item d-flex justify-content-between align-items-center"
+              className="list-group-item"
             >
               <div>
-                <h5 className="mb-1">Name: {Project[1]}</h5>
-                <p className="mb-1">Time Created: {Project[2]}</p>
+                <h5 className="mb-1">Name: {Project[0]}</h5>
+                <p className="mb-1">Time Created: {Project[1]}</p>
                 <p className="mb-1">
-                  Estimated Time of Completion: {Project[3]}
+                  Completion date: {Project[2]}
                 </p>
-                <p className="mb-1">Assigned to manager no.: {Project[4]}</p>
+                <div className="progress">
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{ width: "65%" }}
+                    aria-valuenow="65"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    65%
+                  </div>
+                </div>
+                {/* <p className="mb-1">Assigned to manager no.: {Project[4]}</p> */}
               </div>
-              <span className="badge badge-primary badge-pill bg-dark">
-                #{index + 1}
-              </span>
             </li>
           ))}
         </ul>

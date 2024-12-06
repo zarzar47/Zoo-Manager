@@ -46,9 +46,10 @@ function Login() {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-        background: "linear-gradient(to bottom right, #6a11cb, #2575fc)",
-        boxShadow: "0 0 100px rgba(0, 0, 0, 0.5)",
-        height: "90vh",
+        background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
+        // boxShadow: "0 0 100px rgba(0, 0, 0, 0.5)",
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <div

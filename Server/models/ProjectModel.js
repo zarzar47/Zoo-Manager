@@ -1,6 +1,6 @@
 const oracledb = require("oracledb");
 
-async function listAllProjects() {
+async function listAllProjects() { // this is kinda useless but good as a boilerplate
   let conn;
   try {
     conn = await oracledb.getConnection();
@@ -15,12 +15,12 @@ async function listAllProjects() {
   }
 }
 
-async function listManagerProjects(ID) {
+async function listManagerProjects(ID) { // this will work
   let conn;
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(
-      `SELECT * FROM projects WHERE manager_id = ${ID}`
+      `SELECT ProjectDetail, TO_CHAR(StartDate, 'YYYY-MM-DD') as StartDate, TO_CHAR(estEndDate, 'YYYY-MM-DD') as estEndDate, Manager_id FROM projects WHERE manager_id = ${ID}`
     );
     return result.rows;
   } catch (err) {
@@ -32,11 +32,11 @@ async function listManagerProjects(ID) {
   }
 }
 
-async function numProjects() {
+async function numProjects() { // this will work
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT count(*) FROM employees`);
+    const result = await conn.execute(`SELECT count(*) FROM projects`);
     return result;
   } catch (err) {
     throw err;

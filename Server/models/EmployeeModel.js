@@ -1,6 +1,6 @@
 const oracledb = require("oracledb");
 
-async function listAllEmployees() {
+async function listAllEmployees() { // this is kinda useless but good as a boilerplate
   let conn;
   try {
     conn = await oracledb.getConnection();
@@ -47,12 +47,13 @@ async function FindManager(id) {
   }
 }
 
-async function listManagerEmployees(id) {
+async function listManagerEmployees(id) { // this will work
   let conn;
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(
-      `SELECT * FROM employees where manager_id = ${id}`
+      `SELECT emp_id, name, email, TO_CHAR(hire_date, 'YY-MM-DD') as hiredate, project_id, phoneNum
+       FROM employees where manager_id = ${id}`
     );
     return result.rows;
   } catch (err) {

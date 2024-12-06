@@ -47,9 +47,9 @@ function ForgotPassword() {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-        background: "linear-gradient(to bottom right, #6a11cb, #2575fc)",
+        background: "linear-gradient(to bottom right, #6a11cb, #2575fc, #04ADE0)",
         boxShadow: "0 0 100px rgba(0, 0, 0, 0.5)",
-        height: "90vh",
+        height: "100vh",
       }}
     >
       <div

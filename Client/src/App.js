@@ -6,11 +6,12 @@ import EmployeeDashboard from "./components/Dashboards/EmployeeDashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import OwnerDashboard from "./components/Dashboards/OwnerDashboad";
 import ForgotPassword from './components/Login/ForgotPassword';
+import { ManagerProvider } from "./components/ContextProviders/ManagerContext";
 
 function App() {
   return (
     <Router>
-      <div className="container mt-5">
+      <div>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/ManagerDashboard" element={<ManagerDashboard />} />

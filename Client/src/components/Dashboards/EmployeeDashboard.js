@@ -96,8 +96,7 @@ function EmployeeDashboard() {
   }
 
   return (
-    <div
-    >
+    <div>
       <div
         className="container p-4 shadow-lg"
         style={{
@@ -105,6 +104,7 @@ function EmployeeDashboard() {
           borderRadius: "15px",
           maxWidth: "600px",
           width: "100%",
+          paddingTop: "20px"
         }}
       >
         <div className="d-flex justify-content-between align-items-center mb-4">

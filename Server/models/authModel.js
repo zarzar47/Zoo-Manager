@@ -1,13 +1,12 @@
 const oracledb = require("oracledb");
 
-async function UserExists({ email }) {
+async function UserExists({ email }) { // this will work
   let conn;
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(
       `SELECT * FROM LoginDatabase WHERE email = '${email}'`
     );
-    console.log(result.rows[0]);
     return result.rows[0];
   } catch (err) {
     throw err;
@@ -18,7 +17,7 @@ async function UserExists({ email }) {
   }
 }
 
-async function PasswordChange({ email, new_password }) {
+async function PasswordChange({ email, new_password }) { // this will work
   let conn;
   oracledb.autoCommit = true;
   try {
