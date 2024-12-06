@@ -23,12 +23,18 @@ async function selectManagerComplaints(id) {
 
 async function InsertComplaint(complaintDetes) { // boilerplate 
   let conn;
+  oracledb.autoCommit = true;
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(`
-      SELECT * FROM complaints WHERE manager_id = '${id}'
-    `);
-    return result.rows;
+      BEGIN
+        LogComplaint(:complaint, :emp_id);
+      END;`,
+      {
+      complaint : complaintDetes.complaint,
+      emp_id : complaintDetes.id,
+      });
+    return "success";
   } catch (err) {
     throw err;
   } finally {

@@ -4,7 +4,7 @@ async function listAllProjects() { // this is kinda useless but good as a boiler
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT * FROM projects`);
+    const result = await conn.execute(`SELECT ProjectDetail, TO_CHAR(StartDate, 'YYYY-MM-DD') as StartDate, TO_CHAR(estEndDate, 'YYYY-MM-DD') as estEndDate, Manager_id FROM projects`);
     return result.rows;
   } catch (err) {
     throw err;
@@ -47,8 +47,45 @@ async function numProjects() { // this will work
   }
 }
 
+async function selectEmpProjects(employeeID) {
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+
+    // Call the SQL function
+    const result = await conn.execute(
+      `
+      BEGIN
+        :cursor := GET_EMPLOYEE_PROJECT(:EMPLOYEE_ID);
+      END;
+      `,
+      {
+        cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Bind a cursor for the result
+        EMPLOYEE_ID: employeeID, // Bind the employee ID
+      }
+    );
+
+    // Fetch rows from the cursor
+    const resultSet = result.outBinds.cursor;
+    const rows = await resultSet.getRows(); // Get all rows
+    await resultSet.close(); // Close the cursor
+
+    return rows; // Return the fetched rows
+  } catch (err) {
+    console.error("Error fetching employee's project:", err);
+    throw err; // Re-throw the error
+  } finally {
+    if (conn) {
+      await conn.close(); // Close the connection
+    }
+  }
+}
+
+
+
 module.exports = {
   listAllProjects,
   numProjects,
   listManagerProjects,
+  selectEmpProjects,
 };

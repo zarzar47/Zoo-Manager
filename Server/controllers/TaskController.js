@@ -1,4 +1,4 @@
-const { listAllTasks, empTask, InsertTask, deleteTask, UpdateTask } = require("../models/TaskModel");
+const { listAllTasks, empTask, InsertTask, deleteTask, UpdateTask, UpdateTaskCompletion } = require("../models/TaskModel");
 const { ManagerTask } = require("../models/TaskModel");
 
 async function getAllTasks(req, res) {
@@ -68,11 +68,23 @@ async function EditTask(req, res){
   }
 }
 
+async function CompleteTask(req, res){
+  const { id, completionStatus } = req.body;
+  try {
+    const result = await UpdateTaskCompletion({id, completionStatus});
+    res.json({ result: result });
+  } catch (err) {
+    console.error("Error editing tasks:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 module.exports = { 
   getAllTasks, 
   getEmployeeTasks, 
   getManagerTasks, 
   addTask, 
   removeTask, 
-  EditTask 
+  EditTask,
+  CompleteTask
 };

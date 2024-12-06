@@ -7,4 +7,5 @@ router.post("/TasksEmp", taskController.getEmployeeTasks);
 router.post("/AddTask", taskController.addTask)
 router.post("/RemoveTask", taskController.removeTask)
 router.post("/EditTask", taskController.EditTask)
+router.post("/TaskComp", taskController.CompleteTask)
 module.exports = router;

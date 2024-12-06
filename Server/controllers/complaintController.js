@@ -13,10 +13,10 @@ async function getManagerComplaint(req, res) {
 }
 
 async function AddComplaint(req, res) {
-  const { id  } = req.body
+  const { id, complaint } = req.body
   try {
-    const tasks = await InsertComplaint(id);
-    res.json({ data: tasks });
+    const result = await InsertComplaint({id, complaint});
+    res.status(200);
   } catch (err) {
     console.error("Error fetching tasks:", err);
     res

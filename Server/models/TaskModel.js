@@ -186,6 +186,27 @@ async function UpdateTask(EditedTaskDetes) {
   }
 }
 
+async function UpdateTaskCompletion(TaskDetes){
+  let conn;
+  oracledb.autoCommit = true;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(
+      `Update Tasks set completed = :status where Tasks_id = :taskid`
+    , {
+      taskid: TaskDetes.id,
+      status: TaskDetes.completionStatus,
+    });
+    return "success";
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
 module.exports = {
   listAllTasks,
   numTasks,
@@ -193,5 +214,6 @@ module.exports = {
   ManagerTask,
   InsertTask,
   deleteTask,
-  UpdateTask
+  UpdateTask,
+  UpdateTaskCompletion
 };

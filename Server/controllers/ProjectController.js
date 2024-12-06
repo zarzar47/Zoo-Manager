@@ -1,6 +1,7 @@
 const {
   listAllProjects,
   listManagerProjects,
+  selectEmpProjects
 } = require("../models/ProjectModel");
 
 async function getAllProjects(req, res) {
@@ -24,4 +25,15 @@ async function findManagedProjects(req, res) {
   }
 }
 
-module.exports = { getAllProjects, findManagedProjects };
+async function getEmpProject(req, res){
+  const { id } = req.body;
+  try {
+    const projects = await selectEmpProjects(id);
+    res.status(200).json({ data: projects });
+  } catch (err) {
+    res
+      .status(500);
+  }
+}
+
+module.exports = { getAllProjects, findManagedProjects, getEmpProject };

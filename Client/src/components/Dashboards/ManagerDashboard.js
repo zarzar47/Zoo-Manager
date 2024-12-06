@@ -51,60 +51,52 @@ function ManagerDashboard() {
   }
 
   return (
-    <div
-      className="d-flex flex-column align-items-center justify-content-center"
-    >
       <div
-        className="container p-4 shadow-lg"
-        style={{
-          background: "#fff",
-          borderRadius: "15px",
-          maxWidth: "900px",
-          width: "100%",
-        }}
+        className=" container p-3"
       >
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="text-primary">Manager Dashboard</h2>
-          <button
-            className="btn btn-primary"
-            style={{
-              backgroundColor: "#6a11cb",
-              borderColor: "#6a11cb",
-            }}
-            onClick={() => {
-              navigate("/");
-              fetch("http://localhost:3001/api/auth/logout", {
-                method: "GET",
-                credentials: "include",
-              });
-            }}
-          >
-            <i className="fas fa-arrow-right"></i>
-          </button>
+        <div className = "shadow-lg rounded p-4 bg-light mb-4">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="text-primary mb-0">{manager[2]}</h3>
+            <button
+              className="btn btn-primary btn-sm"
+              style={{
+                backgroundColor: "#6a11cb",
+                borderColor: "#6a11cb",
+              }}
+              onClick={() => {
+                navigate("/");
+                fetch("http://localhost:3001/api/auth/logout", {
+                  method: "GET",
+                  credentials: "include",
+                });
+              }}
+            >
+              <i className="fas fa-arrow-right"></i>
+            </button>
+          </div>
+          <div className="mb-4">
+          <strong>Manager Details</strong>
+            <p>
+              <strong>Email:</strong> {manager[3]}
+            </p>
+          </div>
         </div>
 
-        <h3 className="text-center mb-4">
-          Welcome Manager! <span className="text-success">{manager[2]}</span>
-        </h3>
-
-        <div className="card shadow-sm p-4" style={{ borderRadius: "10px" }}>
-          <div className="mb-4">
+          <div className="shadow-lg rounded p-4 bg-light mb-4">
             <h4 className="text-primary">Projects</h4>
             <ProjectList Projects={projectData} />
           </div>
 
-          <div className="col">
+          <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary">Employees</h4>
               <EmployeeList employees={employeeData} />
           </div>
           <p></p>
-          <div className="col">
+          <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary">Complaints</h4>
               <ComplaintList managerID={userId} />
           </div>
         </div>
-      </div>
-    </div>
   );
 }
 

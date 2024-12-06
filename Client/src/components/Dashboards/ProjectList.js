@@ -10,10 +10,9 @@ const ProjectList = ({ Projects }) => {
           {Projects.map((Project, index) => (
             <li
               key={index}
-              className="list-group-item"
             >
               <div>
-                <h5 className="mb-1">Name: {Project[0]}</h5>
+                <h5 className="mb-1">{Project[0]}</h5>
                 <p className="mb-1">Time Created: {Project[1]}</p>
                 <p className="mb-1">
                   Completion date: {Project[2]}

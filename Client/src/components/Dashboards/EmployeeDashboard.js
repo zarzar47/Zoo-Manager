@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import TaskList from "./TaskList"; // Component to display list of tasks
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import ComplaintButtonWithModal from "./subComponents/ComplaintButtonModal";
 
 function EmployeeDashboard() {
-  const [employee, setEmployee] = useState({ id: 0, name: "", email: "" });
-  const [taskData, setTaskData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [employee, setEmployee] = useState([0, "", "", "", "", ""]);
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
-  const [notifications, setNotifications] = useState([
-    "Welcome to the Zoo Employee Dashboard!",
-    "New task assigned: Check animal habitats.",
-  ]);
-  const [background, setBackground] = useState("forest");
+  const [loading, setLoading] = useState(true);
+  const [selectedTask, setSelectedTask] = useState(null);
+
   const location = useLocation();
   const userId = location.state?.userId;
   const navigate = useNavigate();
@@ -30,18 +27,13 @@ function EmployeeDashboard() {
       });
 
       if (response.status === 401) {
-        response.json().then((data) => {
-          window.location.href = data.redirect;
-        });
+        const data = await response.json();
+        window.location.href = data.redirect;
+        return;
       }
 
       const employeeInfo = await response.json();
-      const id = employeeInfo.data[0];
-      setEmployee({
-        id: employeeInfo.data[0],
-        name: employeeInfo.data[1],
-        email: employeeInfo.data[2],
-      });
+      setEmployee(employeeInfo.data);
 
       const taskResponse = await fetch("http://localhost:3001/api/TasksEmp", {
         method: "POST",
@@ -49,19 +41,101 @@ function EmployeeDashboard() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ id: id }),
+        body: JSON.stringify({ id: userId }),
       });
 
       if (taskResponse.ok) {
         const taskInfo = await taskResponse.json();
-        setTaskData(taskInfo.data);
-        setLoading(false);
-      } else {
-        console.log("Issue getting tasks");
-        setLoading(false);
+        setTasks(taskInfo.data);
+      }
+
+      const projectResponse = await fetch("http://localhost:3001/api/getProjects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ id: employeeInfo.data[0][0] }),
+      });
+
+      if (projectResponse.ok) {
+        const projectInfo = await projectResponse.json();
+        setProjects(projectInfo.data);
       }
     } catch (error) {
-      console.error("Error fetching employee data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+  };
+  
+  // if (task[0] == taskId){ TODO integrate this somewhere (idk where)
+          //   try {
+          //     const taskResponse = await fetch("http://localhost:3001/api/TaskComp", {
+          //       method: "POST",
+          //       headers: {
+          //         "Content-Type": "application/json",
+          //       },
+          //       credentials: "include",
+          //       body: JSON.stringify({ id: taskId, completionStatus: (!task[5] == true)? 1 : 0 }),
+          //     });
+          //     if (taskResponse.ok) {
+          //       console.log("Task completion added")
+          //     }
+          //   } catch (error) {
+          //     console.error("Error fetching data:", error);
+          //   }
+          // }
+
+
+  const toggleTaskCompletion = async (taskId) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => {
+        if (task[0] === taskId) {
+          // Optimistically toggle task completion in the UI
+          return [...task.slice(0, 5), !task[5], ...task.slice(6)];
+        }
+        return task;
+      })
+    );
+  
+    try {
+      // Find the task in the current task list
+      const task = tasks.find((t) => t[0] === taskId);
+      if (task) {
+        // Make the API call to update task completion status
+        const taskResponse = await fetch("http://localhost:3001/api/TaskComp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            id: taskId,
+            completionStatus: task[5] ? 0 : 1, // Send the opposite of the current status
+          }),
+        });
+  
+        if (taskResponse.ok) {
+          console.log("Task completion updated successfully");
+        } else {
+          console.error("Failed to update task completion on the server");
+        }
+      }
+    } catch (error) {
+      console.error("Error updating task completion:", error);
+    }
+
+    if (completedTasks.includes(taskId)) {
+      setCompletedTasks((prevCompleted) =>
+        prevCompleted.filter((id) => id !== taskId)
+      );
+    } else {
+      setCompletedTasks((prevCompleted) => [...prevCompleted, taskId]);
     }
   };
 
@@ -69,54 +143,18 @@ function EmployeeDashboard() {
     fetchEmployeeData();
   }, []);
 
-  const toggleTaskCompletion = (taskId) => {
-    console.log("this is being called")
-    setTaskData((prevTasks) =>
-      prevTasks.map((task, index) => {
-        return task[0] === taskId ? [...task.slice(0, 5), !task[5], ...task.slice(6)] : task
-    })
-    );
-    if (completedTasks.includes(taskId)) {
-      setCompletedTasks((prevCompletedTasks) =>
-        prevCompletedTasks.filter((id) => id !== taskId)
-      );
-    } else {
-      setCompletedTasks((prevCompletedTasks) => [...prevCompletedTasks, taskId]);
-    }
-  };
-
-  const toggleBackground = () => {
-    setBackground((prev) =>
-      prev === "forest" ? "savannah" : prev === "savannah" ? "ocean" : "forest"
-    );
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <div
-        className="container p-4 shadow-lg"
-        style={{
-          background: "rgba(255, 255, 255, 0.9)",
-          borderRadius: "15px",
-          maxWidth: "600px",
-          width: "100%",
-          paddingTop: "20px"
-        }}
-      >
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h3 className="text-primary mb-0">
-            Hello, {employee.name}!
-          </h3>
+    <div className="container p-3">
+      {/* Employee Details */}
+      <div className="shadow-lg rounded p-4 bg-light mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h3 className="text-primary mb-0">{employee[1]}</h3>
           <button
-            className="btn btn-primary"
-            style={{
-              backgroundColor: "#6a11cb",
-              borderColor: "#6a11cb",
-            }}
+            className="btn btn-primary btn-sm"
             onClick={() => {
               navigate("/");
               fetch("http://localhost:3001/api/auth/logout", {
@@ -128,113 +166,128 @@ function EmployeeDashboard() {
             <i className="fas fa-arrow-right"></i>
           </button>
         </div>
+        <div className="mb-4">
+          <h5>Employee Details</h5>
+          <p>
+            <strong>Email:</strong> {employee[2]}
+          </p>
+        </div>
+      </div>
 
-            {/* Performance Summary */}
+      {/* Performance Summary */}
+      <div className="shadow-sm rounded p-3 mb-4 bg-dark text-white">
+        <h5>Performance Summary</h5>
+        <p>
+          Tasks Completed: {completedTasks.length} / {tasks.length}
+        </p>
+      </div>
+
+      {/* Projects Section */}
+      <div className="shadow-sm rounded p-3 mb-4 bg-light">
+        <h5 className="text-primary">Your Projects</h5>
+        {projects.length === 0 ? (
+          <p>No projects assigned yet.</p>
+        ) : (
+          projects.map((project) => (
             <div
-              className="mb-4 p-3"
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)", // Dark background with some transparency
-                color: "white", // Light text color for contrast
-                borderRadius: "10px", // Smooth corners
-              }}
->
-              <h5>Performance Summary:</h5>
-               <p>
-                   Tasks Completed: {completedTasks.length} / {taskData.length}
+              key={project[0]}
+              className="mb-3 p-2 rounded border"
+              style={{ cursor: "pointer" }}
+              onClick={() => alert(`Project Details: ${project[2]}`)}
+            >
+              <h6>{project[1]}</h6>
+              <p>
+                Start: {project[3]} | End: {project[4]}
               </p>
             </div>
+          ))
+        )}
+      </div>
 
-
-        {/* Special Project Section */}
-        <div className="card shadow-sm mb-4" style={{ borderRadius: "10px" }}>
-          <h4 className="card-header text-center text-primary">
-            Special Project
-          </h4>
-          <div className="card-body">
-            <p>Project: Revamp the aviary section</p>
-            <div className="progress">
-              <div
-                className="progress-bar"
-                role="progressbar"
-                style={{ width: "65%" }}
-                aria-valuenow="65"
-                aria-valuemin="0"
-                aria-valuemax="100"
+      {/* Tasks Section */}
+      <div className="shadow-sm rounded p-3 bg-light">
+        <h5 className="text-primary">Your Tasks</h5>
+        {tasks.length === 0 ? (
+          <p>No tasks assigned yet.</p>
+        ) : (
+          tasks.map((task) => (
+            <div
+              key={task[0]}
+              className={`d-flex justify-content-between align-items-center mb-2 p-2 rounded border ${
+                task[5] ? "bg-success text-white" : ""
+              }`}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleTaskClick(task)}
+            >
+              <span
+                style={{
+                  textDecoration: task[5] ? "line-through" : "none",
+                }}
               >
-                65%
+                {task[1]}
+              </span>
+              <button
+                className={`btn btn-sm ${task[5] ? "btn-light" : "btn-primary"}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleTaskCompletion(task[0]);
+                }}
+              >
+                {task[5] ? "Undo" : "Complete"}
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Modal for Task Details */}
+      {selectedTask && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Task Details</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setSelectedTask(null)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  <strong>Task Description:</strong> {selectedTask[1]}
+                </p>
+                <p>
+                  <strong>Assigned Time:</strong> {selectedTask[2]}
+                </p>
+                <p>
+                  <strong>Assigned Date:</strong> {new Date(selectedTask[3]).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Completed:</strong> {selectedTask[5] ? "Yes" : "No"}
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setSelectedTask(null)}
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Notifications Section */}
-        <div className="card shadow-sm mb-4" style={{ borderRadius: "10px" }}>
-          <h4 className="card-header text-center text-primary">
-            Notifications
-          </h4>
-          <div className="card-body">
-            <ul>
-              {notifications.map((note, index) => (
-                <li key={index}>{note}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Task List */}
-        <div className="card shadow-sm" style={{ borderRadius: "10px" }}>
-          <h4 className="card-header text-center text-primary">Your Tasks</h4>
-          <div className="card-body">
-            {taskData.map((task, index) => (
-              <div
-                key={task[0]}
-                className={`d-flex justify-content-between align-items-center mb-2 ${
-                  task[5] ? "text-muted" : ""
-                }`}
-              >
-                <span
-                  style={{
-                    textDecoration: task[5] ? "line-through" : "none",
-                  }}
-                >
-                  {task[1]}
-                </span>
-                {task[5] ? <button
-                  className="btn btn-success btn-sm"
-                  onClick={() => toggleTaskCompletion(task[0])}
-                >
-                  <i className="fas fa-check"></i>
-                </button> : 
-                  <button
-                  className="btn btn-light btn-sm"
-                  onClick={() => toggleTaskCompletion(task[0])}
-                >
-                  <i className="fas fa-circle"></i>
-                </button>
-                }
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Add Complaint Button */}
-        <button
-          className="btn btn-primary position-fixed"
-          style={{
-            bottom: "10px",
-            left: "10px",
-            borderRadius: "50%",
-            width: "50px",
-            height: "50px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <i className="fas fa-comment"></i>
-        </button>
+      )}
+      {/* Complaint Button */}
+      <ComplaintButtonWithModal employeeID={userId}></ComplaintButtonWithModal>
       </div>
-    </div>
   );
 }
 
