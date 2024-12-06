@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import EmployeeList from "./EmployeeList";
 import ProjectList from "./ProjectList";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TaskList from "./TaskList";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ComplaintList from "./Complaintlist";
 
 function ManagerDashboard() {
   const [manager, setManager] = useState({ id: 0, name: "", email: "" });
@@ -96,6 +96,11 @@ function ManagerDashboard() {
           <div className="col">
               <h4 className="text-primary">Employees</h4>
               <EmployeeList employees={employeeData} />
+          </div>
+          <p></p>
+          <div className="col">
+              <h4 className="text-primary">Complaints</h4>
+              <ComplaintList managerID={userId} />
           </div>
         </div>
       </div>

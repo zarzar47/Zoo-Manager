@@ -11,18 +11,9 @@ const AddTaskModal = ({ show, onClose, employee }) => {
       return;
     }
 
-    let val = 0;
-    if (urgency == "Low"){
-      val = 2;
-    } else if (urgency == "Medium") {
-      val = 6;
-    } else if (urgency == "High") {
-      val = 8;
-    }
-
     const newTask = {
       description: taskDescription,
-      urgency: val,
+      urgency: urgency,
       reserveId: reserveId,
       employeeId: employee[0], // Employee ID
     };
@@ -76,16 +67,12 @@ const AddTaskModal = ({ show, onClose, employee }) => {
             </div>
             <div className="mb-3">
               <label className="form-label">Urgency</label>
-              <select
-                className="form-select"
+              <input
+                type="text"
+                className="form-control"
                 value={urgency}
                 onChange={(e) => setUrgency(e.target.value)}
-              >
-                <option value="">Select urgency</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Reserve ID</label>

@@ -6,6 +6,7 @@ const ProjectRoutes = require("./routes/ProjectRoutes");
 const TaskRoutes = require("./routes/TaskRoutes");
 const authRoutes = require("./routes/authRoutes");
 const managerRoutes = require("./routes/managerRoutes");
+const complaintRoutes = require("./routes/complaintRoutes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./config/db");
@@ -37,7 +38,6 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -57,6 +57,7 @@ app.use("/api", ensureAuthenticated, ProjectRoutes);
 app.use("/api", ensureAuthenticated, TaskRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/Manager", ensureAuthenticated, managerRoutes);
+app.use("/api/Complaints/", ensureAuthenticated, complaintRoutes)
 
 // Start Server and DB
 // if the port is specified in the env file then it is used orelse 5000 is used as the port
