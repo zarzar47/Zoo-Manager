@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import EmployeeList from "./EmployeeList";
+import OwnerEmployeeList from "./OwnerDashboard/OEmployeeList";
 import ProjectList from "./ProjectList";
-import TaskList from "./TaskList";
+import OwnerTaskList from "./OwnerDashboard/OTaskList";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ManagerList from "./ManagerList";
@@ -79,20 +79,17 @@ function OwnerDashboard() {
   }
 
   return (
-    <div className="d-flex flex-column align-items-center p-4">
       <div
-        className="container p-4 shadow-lg"
+        className=" p-3 shadow-lg"
         style={{
-          backgroundColor: "#fff",
-          borderRadius: "15px",
-          maxWidth: "1200px",
-          width: "100%",
+          background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
+          minHeight: "100vh",
         }}
       >
         {/* Header */}
-        <header className="container mb-4">
+        <header className="shadow-lg rounded p-4 bg-white mb-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="text-primary">Welcome, Owner! {ownerData[2]}</h2>
+          <h2 className="text-primary">Welcome Owner! {ownerData[2]}</h2>
           <button
             className="btn btn-primary btn-sm"
             style={{
@@ -115,33 +112,38 @@ function OwnerDashboard() {
             Here is an overview of your projects, employees, and tasks.
           </p>
         </header>
-
+        
         {/* Content Section */}
         <div className="row g-4">
           {/* Projects */}
           <div className="col-12">
-            <div className="card shadow-sm p-4">
+            <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary mb-3 text-center">Projects</h4>
               <ProjectList Projects={projectData} />
             </div>
           </div>
-          <ManagerList managers={managerData}></ManagerList>
+          {/* Managers */}
+          <div className="col">
+            <div className="shadow-lg rounded p-4 bg-light mb-4">
+              <h4 className="text-primary mb-3 text-center">Managers</h4>
+                <ManagerList managers={managerData}></ManagerList>
+            </div>
+          </div>
           {/* Employees and Tasks */}
           <div className="col">
-            <div className="card shadow-sm p-4 h-100">
+            <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary mb-3 text-center">Employees</h4>
-              <EmployeeList employees={employeeData} />
+              <OwnerEmployeeList employees={employeeData} />
             </div>
           </div>
           <div className="col-md-6">
-            <div className="card shadow-sm p-4 h-100">
+            <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary mb-3 text-center">Tasks</h4>
-              <TaskList Tasks={taskData} />
+              <OwnerTaskList Tasks={taskData} />
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

@@ -9,10 +9,10 @@ const ManagerItem = ({ manager, onAddEmployeeClick }) => {
         <p className="mb-0"><strong>Hire Date:</strong> {manager[2]}</p>
       </div>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary btn-sm"
         onClick={() => onAddEmployeeClick(manager)}
       >
-        Add Employee
+        +
       </button>
     </li>
   );

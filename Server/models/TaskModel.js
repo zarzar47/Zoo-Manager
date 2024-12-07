@@ -4,14 +4,16 @@ async function listAllTasks() { // boilerplate
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT 
+    const result = await conn.execute(`
+      SELECT 
         Tasks_id,
         taskdesc, 
         TO_CHAR(time, ' DD-MM-YY HH:MI:SS AM') AS task_time, 
         RID, 
         urgency, 
-        completed
-      FROM tasks T`);
+        completed,
+        E.name
+      FROM tasks T inner join Employees E on (E.emp_id = T.employeeid)`);
     return result.rows;
   } catch (err) {
     throw err;

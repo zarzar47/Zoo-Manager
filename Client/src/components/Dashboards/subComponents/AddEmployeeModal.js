@@ -16,12 +16,10 @@ const AddEmployeeModal = ({ show, onClose, manager }) => {
   };
 
   const handleAddEmployee = async () => {
-    console.log("Is this working????")
     if (!employeeDetails.name || !employeeDetails.email || !employeeDetails.phoneNum) {
       alert("Please fill in all fields.");
       return;
     }
-    console.log("Is this working???? 2")
     try {
       const response = await fetch("http://localhost:3001/api/Manager/AddEmployee", {
         method: "POST",
