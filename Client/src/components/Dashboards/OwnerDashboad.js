@@ -3,12 +3,18 @@ import EmployeeList from "./EmployeeList";
 import ProjectList from "./ProjectList";
 import TaskList from "./TaskList";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import ManagerList from "./ManagerList";
 
 function OwnerDashboard() {
   const [employeeData, setEmployeeData] = useState([]);
+  const [managerData, setManagerData] = useState([]);
   const [projectData, setProjectData] = useState([]);
   const [taskData, setTaskData] = useState([]);
+  const [ownerData, setrOwnerData] = useState({ id: 0, name: "", email: "" });
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const userId = location.state?.userId;
   const navigate = useNavigate();
 
   const fetchData = async (endpoint, setter) => {
@@ -16,11 +22,6 @@ function OwnerDashboard() {
       const response = await fetch(`http://localhost:3001/api/${endpoint}`, {
         credentials: "include",
       });
-      if (response.status === 401) {
-        response.json().then((data) => {
-          window.location.href = data.redirect;
-        });
-      }
       const data = await response.json();
       const sortedData = data.data.sort((a, b) => (a[0] < b[0] ? -1 : 1));
       setter(sortedData);
@@ -29,10 +30,35 @@ function OwnerDashboard() {
     }
   };
 
+  const OwnerData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/Owner/Info`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body : JSON.stringify({ id: userId }),
+      });
+      if (response.status === 401) {
+        response.json().then((data) => {
+          window.location.href = data.redirect;
+        });
+      }
+      const data = await response.json();
+      console.log(data)
+      setrOwnerData(data.data)
+    } catch (error) {
+      console.error(`Error fetching Owner data data:`, error);
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
+      OwnerData()
       setLoading(true);
       await Promise.all([
+        fetchData("Manager/all", setManagerData),
         fetchData("employees", setEmployeeData),
         fetchData("projects", setProjectData),
         fetchData("tasks", setTaskData),
@@ -64,8 +90,27 @@ function OwnerDashboard() {
         }}
       >
         {/* Header */}
-        <header className="text-center mb-4">
-          <h2 className="text-primary">Welcome, Owner!</h2>
+        <header className="container mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="text-primary">Welcome, Owner! {ownerData[2]}</h2>
+          <button
+            className="btn btn-primary btn-sm"
+            style={{
+              backgroundColor: "#6a11cb",
+              borderColor: "#6a11cb",
+            }}
+            onClick={() => {
+              navigate("/");
+              fetch("http://localhost:3001/api/auth/logout", {
+                method: "GET",
+                credentials: "include",
+              });
+            }}
+          >
+            <i className="fas fa-arrow-right"></i>
+          </button>
+          </div>
+          <p> Email {ownerData[1]}</p>
           <p className="text-muted">
             Here is an overview of your projects, employees, and tasks.
           </p>
@@ -80,7 +125,7 @@ function OwnerDashboard() {
               <ProjectList Projects={projectData} />
             </div>
           </div>
-
+          <ManagerList managers={managerData}></ManagerList>
           {/* Employees and Tasks */}
           <div className="col">
             <div className="card shadow-sm p-4 h-100">

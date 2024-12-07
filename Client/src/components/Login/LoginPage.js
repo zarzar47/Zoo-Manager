@@ -29,6 +29,8 @@ function Login() {
           navigate("EmployeeDashboard", { state: { userId: data.id } });
         else if (data.status === "M")
           navigate("ManagerDashboard", { state: { userId: data.id } });
+        else if (data.status === "O")
+          navigate("OwnerDashboard", { state: { userId: data.id } });
       } else {
         const errorData = await response.json();
         setError(errorData.message);

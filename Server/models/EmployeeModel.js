@@ -17,6 +17,7 @@ async function listAllEmployees() { // this is kinda useless but good as a boile
 
 async function numEmployees() {
   let conn;
+  
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(`SELECT count(*) FROM employees`);
@@ -65,9 +66,51 @@ async function listManagerEmployees(id) { // this will work
   }
 }
 
+async function listManagerInfo(){
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(`SELECT * FROM Managers`);
+    return result.rows;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
+async function InsertEmployee(EmployeeDete){
+  let conn;
+  oracledb.autoCommit = true;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(`
+      BEGIN
+        AddingEmployees(:name, :email, :phoneNum, :managerID);
+      END;
+      `,{
+        name: EmployeeDete.name,
+        email: EmployeeDete.email,
+        phoneNum : EmployeeDete.phoneNum,
+        managerID : EmployeeDete.managerID,
+      });
+    return "success";
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
 module.exports = {
   listAllEmployees,
   numEmployees,
   FindManager,
   listManagerEmployees,
+  listManagerInfo,
+  InsertEmployee
 };

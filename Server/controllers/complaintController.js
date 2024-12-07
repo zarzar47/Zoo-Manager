@@ -1,4 +1,4 @@
-const { InsertComplaint, selectManagerComplaints } = require("../models/complaintModel");
+const { InsertComplaint, selectManagerComplaints, deleteComplaint } = require("../models/complaintModel");
 
 async function getManagerComplaint(req, res) {
   const { id } = req.body
@@ -24,7 +24,21 @@ async function AddComplaint(req, res) {
   }
 }
 
+async function RemoveComplaint(req, res) {
+  const { id } = req.body
+  console.log("got here in the first place ", id)
+  try {
+    const result = await deleteComplaint(id);
+    res.status(200);
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+    res
+      .status(500);
+  }
+}
+
 module.exports = { 
   getManagerComplaint,
   AddComplaint,
+  RemoveComplaint,
 };

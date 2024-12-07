@@ -4,7 +4,14 @@ async function listAllTasks() { // boilerplate
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT * FROM tasks`);
+    const result = await conn.execute(`SELECT 
+        Tasks_id,
+        taskdesc, 
+        TO_CHAR(time, ' DD-MM-YY HH:MI:SS AM') AS task_time, 
+        RID, 
+        urgency, 
+        completed
+      FROM tasks T`);
     return result.rows;
   } catch (err) {
     throw err;

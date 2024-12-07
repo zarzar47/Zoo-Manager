@@ -43,7 +43,6 @@ function ManagerDashboard() {
     fetchData("Manager/", setManager);
     fetchData("Manager/employees", setemployeeData);
     fetchData("Manager/projects", setProjectData);
-    // fetchData("Manager/tasks", setTaskData);
   }, []);
 
   if (loading) {
@@ -51,56 +50,56 @@ function ManagerDashboard() {
   }
 
   return (
-      <div
-        className=" p-3 "
-        style = {{
-          background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
-          minHeight: "100vh",
-        }}
-      >
-        <div className = "shadow-lg rounded p-4 bg-white mb-4">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h3 className="text-primary mb-0">{manager[2]}</h3>
-            <button
-              className="btn btn-primary btn-sm"
-              style={{
-                backgroundColor: "#6a11cb",
-                borderColor: "#6a11cb",
-              }}
-              onClick={() => {
-                navigate("/");
-                fetch("http://localhost:3001/api/auth/logout", {
-                  method: "GET",
-                  credentials: "include",
-                });
-              }}
-            >
-              <i className="fas fa-arrow-right"></i>
-            </button>
-          </div>
-          <div className="mb-4">
+    <div
+      className=" p-3 "
+      style={{
+        background: "linear-gradient(to bottom right, #5FE86C,#5FE8C9,#89E85F)",
+        minHeight: "100vh",
+      }}
+    >
+      <div className="shadow-lg rounded p-4 bg-white mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h3 className="text-primary mb-0">{manager[2]}</h3>
+          <button
+            className="btn btn-primary btn-sm"
+            style={{
+              backgroundColor: "#6a11cb",
+              borderColor: "#6a11cb",
+            }}
+            onClick={() => {
+              navigate("/");
+              fetch("http://localhost:3001/api/auth/logout", {
+                method: "GET",
+                credentials: "include",
+              });
+            }}
+          >
+            <i className="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <div className="mb-4">
           <strong>Manager Details</strong>
-            <p>
-              <strong>Email:</strong> {manager[3]}
-            </p>
-          </div>
+          <p>
+            <strong>Email:</strong> {manager[3]}
+          </p>
         </div>
+      </div>
 
-          <div className="shadow-lg rounded p-4 bg-light mb-4">
-            <h4 className="text-primary">Projects</h4>
-            <ProjectList Projects={projectData} />
-          </div>
+      <div className="shadow-lg rounded p-4 bg-light mb-4">
+        <h4 className="text-primary">Projects</h4>
+        <ProjectList Projects={projectData} />
+      </div>
 
-          <div className="shadow-lg rounded p-4 bg-light mb-4">
-              <h4 className="text-primary">Employees</h4>
-              <EmployeeList employees={employeeData} />
-          </div>
-          <p></p>
-          <div className="shadow-lg rounded p-4 bg-light mb-4">
-              <h4 className="text-primary">Complaints</h4>
-              <ComplaintList managerID={userId} />
-          </div>
-        </div>
+      <div className="shadow-lg rounded p-4 bg-light mb-4">
+        <h4 className="text-primary">Employees</h4>
+        <EmployeeList employees={employeeData} />
+      </div>
+      <p></p>
+      <div className="shadow-lg rounded p-4 bg-light mb-4">
+        <h4 className="text-primary">Complaints</h4>
+        <ComplaintList managerID={userId} />
+      </div>
+    </div>
   );
 }
 

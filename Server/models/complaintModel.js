@@ -7,7 +7,7 @@ async function selectManagerComplaints(id) {
 
     // Use bind parameters to avoid SQL injection and type mismatches
     const result = await conn.execute(
-      `SELECT * FROM complaints WHERE manager_id = :id`,
+      `SELECT C.complaint_num, C.complaint, C.manager_id, E.name FROM complaints C Inner join employees E ON (C.employee_id = E.emp_id) WHERE C.manager_id = :id `,
       [id]
     );
     return result.rows;
@@ -44,8 +44,29 @@ async function InsertComplaint(complaintDetes) { // boilerplate
   }
 }
 
+async function deleteComplaint(complaint_num){
+  let conn;
+  oracledb.autoCommit = true;
+  console.log("this is the complaint nubmer " +complaint_num)
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(`
+      delete from complaints where complaint_num = :complaint_id
+      `,
+      [complaint_num]
+    );
+    return "success";
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
 
 module.exports = {
   selectManagerComplaints,
   InsertComplaint,
+  deleteComplaint,
 };

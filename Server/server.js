@@ -7,6 +7,7 @@ const TaskRoutes = require("./routes/TaskRoutes");
 const authRoutes = require("./routes/authRoutes");
 const managerRoutes = require("./routes/managerRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
+const ownerRoutes = require("./routes/OwnerRoutes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./config/db");
@@ -20,7 +21,6 @@ function ensureAuthenticated(req, res, next) {
   }
 
   if (!req.session.user) {
-    console.log("Redirected");
     res.status(401).json({ redirect: "http://localhost:3000/" });
     return;
   }
@@ -58,6 +58,7 @@ app.use("/api", ensureAuthenticated, TaskRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/Manager", ensureAuthenticated, managerRoutes);
 app.use("/api/Complaints/", ensureAuthenticated, complaintRoutes)
+app.use("/api/Owner", ownerRoutes)
 
 // Start Server and DB
 // if the port is specified in the env file then it is used orelse 5000 is used as the port

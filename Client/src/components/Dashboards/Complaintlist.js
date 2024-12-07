@@ -29,12 +29,38 @@ const ComplaintList = ({ managerID }) => {
     }
   };
 
+  // Resolve a complaint by deleting it from the database
+  const handleResolveComplaint = async (complaintID) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/Complaints/DeleteComplaint",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ id: complaintID }),
+        }
+      );
+      if (response.ok) {
+        alert(`Complaint #${complaintID} resolved successfully!`);
+        // Remove the resolved complaint from the local state
+        setComplaints(complaints.filter((complaint) => complaint[0] !== complaintID));
+      } else {
+        alert("Failed to resolve complaint. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error resolving complaint:", error);
+    }
+  };
+
   useEffect(() => {
     fetchComplaints();
   }, []);
 
   return (
-    <div className="container mt-1">
+    <div className="container mt-3">
       {complaints.length > 0 ? (
         <div className="row">
           {complaints.map((complaint, index) => (
@@ -45,14 +71,21 @@ const ComplaintList = ({ managerID }) => {
             >
               <div className="card shadow-sm border-primary">
                 <div className="card-body">
-                  <h5 className="card-title">Complaint #{complaint[0]}</h5>
+                  <h5 className="card-title">Complaint ID {complaint[0]}</h5>
                   <p className="card-text">
                     <strong>Description:</strong> {complaint[1]}
                   </p>
                   <p className="card-text">
                     <strong>Issued by: </strong>
-                    <span> employee #{complaint[3]}</span>
+                    <span>{complaint[3]}</span>
                   </p>
+                  {/* Resolved Button */}
+                  <button
+                    className="btn btn-success mt-3"
+                    onClick={() => handleResolveComplaint(complaint[0])}
+                  >
+                    Mark as Resolved
+                  </button>
                 </div>
               </div>
             </div>
