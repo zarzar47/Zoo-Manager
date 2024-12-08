@@ -47,6 +47,21 @@ async function numProjects() { // this will work
   }
 }
 
+async function SelectReserve() {
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(`select * from reserves`);
+    return result.rows;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
 async function selectEmpProjects(employeeID) {
   let conn;
   try {
@@ -138,5 +153,6 @@ module.exports = {
   listManagerProjects,
   selectEmpProjects,
   UpdateAddProject,
-  InsertProject
+  InsertProject,
+  SelectReserve
 };

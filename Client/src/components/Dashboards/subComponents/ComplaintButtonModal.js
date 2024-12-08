@@ -7,10 +7,9 @@ function ComplaintButtonWithModal({ employeeID }) {
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleSubmitComplaint = () => {
-    console.log("Complaint Submitted:", complaintDetails);
-
-    fetch("http://localhost:3001/api/Complaints/PostComplaints", {
+  const handleSubmitComplaint = async () => {
+    try {
+    const response = await fetch("http://localhost:3001/api/Complaints/PostComplaints", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,16 +17,17 @@ function ComplaintButtonWithModal({ employeeID }) {
       credentials: "include",
       body: JSON.stringify({ id: employeeID, complaint: complaintDetails }),
     })
-      .then((response) => {
-        if (response.ok) {
-          alert("Complaint submitted successfully!");
-          setComplaintDetails(""); // Reset the input
-          handleCloseModal(); // Close the modal
-        } else {
-          alert("Failed to submit complaint.");
-        }
-      })
-      .catch((error) => console.error("Error submitting complaint:", error));
+    
+    if (response.ok) {
+      alert("Complaint submitted successfully!");
+      setComplaintDetails(""); // Reset the input
+      handleCloseModal(); // Close the modal
+    } else {
+      alert("Failed to submit complaint.");
+    }
+    } catch (e) {
+      console.log("encountered error "+e)
+    }
   };
 
   return (

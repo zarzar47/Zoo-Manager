@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-const AddTaskModal = ({ show, onClose, employee }) => {
+const AddTaskModal = ({ show, onClose, employee, reserveData }) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [urgency, setUrgency] = useState("");
   const [reserveId, setReserveId] = useState("");
-
+  
   const handleAddTask = async () => {
     if (!taskDescription || !urgency || !reserveId) {
       alert("Please fill out all fields!");
@@ -40,7 +40,6 @@ const AddTaskModal = ({ show, onClose, employee }) => {
   };
 
   if (!show) return null; // Do not render if modal is hidden
-  console.log("Selected Employee info ",employee)
   return (
     <div
       className="modal fade show"
@@ -49,7 +48,9 @@ const AddTaskModal = ({ show, onClose, employee }) => {
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Add Task for {employee ? employee[1] : "Employee"}</h5>
+            <h5 className="modal-title">
+              Add Task for {employee ? employee[1] : "Employee"}
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -76,12 +77,20 @@ const AddTaskModal = ({ show, onClose, employee }) => {
             </div>
             <div className="mb-3">
               <label className="form-label">Reserve ID</label>
-              <input
-                type="text"
+              <select
                 className="form-control"
-                value={reserveId}
+                value={reserveId || ""}
                 onChange={(e) => setReserveId(e.target.value)}
-              />
+              >
+                <option value="" disabled>
+                  Select a Reserve
+                </option>
+                {reserveData.map((reserve) => (
+                  <option key={reserve[0]} value={reserve[0]}>
+                    {reserve[1]}{" "}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="modal-footer">

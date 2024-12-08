@@ -3,7 +3,8 @@ const {
   listManagerProjects,
   selectEmpProjects,
   UpdateAddProject,
-  InsertProject
+  InsertProject,
+  SelectReserve
 } = require("../models/ProjectModel");
 
 async function getAllProjects(req, res) {
@@ -60,4 +61,14 @@ async function AddProject(req, res){
   }
 }
 
-module.exports = { getAllProjects, findManagedProjects, getEmpProject, AddToProject, AddProject };
+async function getReserveInfo(req, res) {
+  try {
+    const reserveInfo = await SelectReserve();
+    res.json({ data : reserveInfo})
+  } catch (e){
+    console.log("There was some issue retriving reserve info")
+    res.status(500)
+  }
+}
+
+module.exports = { getAllProjects, findManagedProjects, getEmpProject, AddToProject, AddProject, getReserveInfo };

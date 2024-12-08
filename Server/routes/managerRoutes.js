@@ -16,4 +16,5 @@ router.post("/tasks", getManagerTasks);
 router.post("/", findManagerInfo);
 router.get("/all", allManagersInfo);
 router.post("/AddEmployee", addEmployee);
+
 module.exports = router;

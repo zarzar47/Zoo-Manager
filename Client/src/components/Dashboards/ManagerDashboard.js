@@ -14,6 +14,7 @@ function ManagerDashboard() {
   const userId = location.state?.userId;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [reserveData, setReserveData] = useState([]);
 
   const fetchData = async (endpoint, setter) => {
     try {
@@ -43,6 +44,7 @@ function ManagerDashboard() {
     fetchData("Manager/", setManager);
     fetchData("Manager/employees", setemployeeData);
     fetchData("Manager/projects", setProjectData);
+    fetchData("/ReserveInfo", setReserveData)
   }, []);
 
   if (loading) {
@@ -92,7 +94,7 @@ function ManagerDashboard() {
 
       <div className="shadow-lg rounded p-4 bg-light mb-4">
         <h4 className="text-primary">Employees</h4>
-        <EmployeeList employees={employeeData} />
+        <EmployeeList employees={employeeData} reserveData={reserveData} />
       </div>
       <p></p>
       <div className="shadow-lg rounded p-4 bg-light mb-4">

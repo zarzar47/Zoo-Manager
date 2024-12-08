@@ -6,5 +6,6 @@ router.get("/Projects", ProjectController.getAllProjects);
 router.post("/getProjects", ProjectController.getEmpProject);
 router.post("/AddToProject", ProjectController.AddToProject);
 router.post("/AddProject", ProjectController.AddProject);
+router.post("/ReserveInfo", ProjectController.getReserveInfo);
 
 module.exports = router;

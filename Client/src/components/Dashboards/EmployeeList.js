@@ -4,7 +4,7 @@ import EmployeeItem from "./subComponents/EmployeeItem";
 import AddTaskModal from "./subComponents/AddTaskModal";
 import InfoModal from "./subComponents/InfoModal";
 
-const EmployeeList = ({ employees }) => {
+const EmployeeList = ({ reserveData, employees }) => {
   const [showModal, setShowModal] = useState(false); // Info modal visibility
   const [showAddTaskModal, setShowAddTaskModal] = useState(false); // Add Task modal visibility
   const [selectedEmployee, setSelectedEmployee] = useState(null); // Selected employee
@@ -80,6 +80,7 @@ const EmployeeList = ({ employees }) => {
         onClose={closeModal}
       />
       <AddTaskModal
+        reserveData={reserveData}
         show={showAddTaskModal}
         onClose={closeAddTaskModal}
         employee={selectedEmployee}

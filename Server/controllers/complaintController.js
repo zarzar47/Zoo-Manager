@@ -16,7 +16,7 @@ async function AddComplaint(req, res) {
   const { id, complaint } = req.body
   try {
     const result = await InsertComplaint({id, complaint});
-    res.status(200);
+    res.json({ result: result });
   } catch (err) {
     console.error("Error fetching tasks:", err);
     res

@@ -46,7 +46,14 @@ function EmployeeDashboard() {
 
       if (taskResponse.ok) {
         const taskInfo = await taskResponse.json();
-        setTasks(taskInfo.data);
+        const fetchedTasks = taskInfo.data;
+        setTasks(fetchedTasks);
+
+        const completed = fetchedTasks
+          .filter((task) => task[5] === 1)
+          .map((task) => task[0]);
+
+        setCompletedTasks(completed);
       }
 
       const projectResponse = await fetch("http://localhost:3001/api/getProjects", {
@@ -55,13 +62,15 @@ function EmployeeDashboard() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ id: employeeInfo.data[0][0] }),
+        body: JSON.stringify({ id: employeeInfo.data[0] }),
       });
 
       if (projectResponse.ok) {
         const projectInfo = await projectResponse.json();
+        console.log("This is the project information " +projectInfo.data)
         setProjects(projectInfo.data);
       }
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -72,25 +81,6 @@ function EmployeeDashboard() {
   const handleTaskClick = (task) => {
     setSelectedTask(task);
   };
-  
-  // if (task[0] == taskId){ TODO integrate this somewhere (idk where)
-          //   try {
-          //     const taskResponse = await fetch("http://localhost:3001/api/TaskComp", {
-          //       method: "POST",
-          //       headers: {
-          //         "Content-Type": "application/json",
-          //       },
-          //       credentials: "include",
-          //       body: JSON.stringify({ id: taskId, completionStatus: (!task[5] == true)? 1 : 0 }),
-          //     });
-          //     if (taskResponse.ok) {
-          //       console.log("Task completion added")
-          //     }
-          //   } catch (error) {
-          //     console.error("Error fetching data:", error);
-          //   }
-          // }
-
 
   const toggleTaskCompletion = async (taskId) => {
     setTasks((prevTasks) =>
@@ -104,10 +94,8 @@ function EmployeeDashboard() {
     );
   
     try {
-      // Find the task in the current task list
       const task = tasks.find((t) => t[0] === taskId);
       if (task) {
-        // Make the API call to update task completion status
         const taskResponse = await fetch("http://localhost:3001/api/TaskComp", {
           method: "POST",
           headers: {
@@ -146,7 +134,6 @@ function EmployeeDashboard() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className=" p-3"
       style={{
@@ -172,9 +159,11 @@ function EmployeeDashboard() {
           </button>
         </div>
         <div className="mb-4">
-          <h5>Employee Details</h5>
           <p>
             <strong>Email:</strong> {employee[2]}
+          </p>
+          <p>
+            <strong>Manager:</strong> {employee[4]}
           </p>
         </div>
       </div>
@@ -197,13 +186,12 @@ function EmployeeDashboard() {
             <div
               key={project[0]}
               className="mb-3 p-2 rounded border"
-              style={{ cursor: "pointer" }}
-              onClick={() => alert(`Project Details: ${project[2]}`)}
             >
-              <h6>{project[1]}</h6>
-              <p>
-                Start: {project[3]} | End: {project[4]}
-              </p>
+              <h5>{project[1]}</h5>
+                <p>
+                  Start: {new Date(project[2]).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} <br></br>
+                  End: {new Date(project[3]).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                </p>
             </div>
           ))
         )}

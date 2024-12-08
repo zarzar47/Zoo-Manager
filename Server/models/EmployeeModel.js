@@ -23,7 +23,10 @@ async function selectEmployee(emp_id) {
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT * FROM Employees WHERE emp_id = '${emp_id}'`);
+    const result = await conn.execute(`
+      SELECT E.emp_id, E.name, E.Email, E.hire_date, M.name, E.project_id, E.phoneNum  
+      FROM Employees E 
+      inner join managers M USING (manager_id) WHERE emp_id = '${emp_id}'`);
     return result.rows[0];
   } catch (err) {
     throw err;
