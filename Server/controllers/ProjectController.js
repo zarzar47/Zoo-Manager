@@ -1,7 +1,9 @@
 const {
   listAllProjects,
   listManagerProjects,
-  selectEmpProjects
+  selectEmpProjects,
+  UpdateAddProject,
+  InsertProject
 } = require("../models/ProjectModel");
 
 async function getAllProjects(req, res) {
@@ -36,4 +38,26 @@ async function getEmpProject(req, res){
   }
 }
 
-module.exports = { getAllProjects, findManagedProjects, getEmpProject };
+async function AddToProject(req, res){
+  const { id } = req.body;
+  try {
+    const projects = await UpdateAddProject(id);
+    res.status(200).json({ data: projects });
+  } catch (err) {
+    res
+      .status(500);
+  }
+}
+
+async function AddProject(req, res){
+  const { projectName, manager_id } = req.body;
+  try {
+    const projects = await InsertProject({projectName, manager_id});
+    res.status(200);
+  } catch (err) {
+    res
+      .status(500);
+  }
+}
+
+module.exports = { getAllProjects, findManagedProjects, getEmpProject, AddToProject, AddProject };

@@ -4,6 +4,8 @@ const {
   listManagerEmployees,
   listManagerInfo,
   InsertEmployee,
+  bestEmployee,
+  selectEmployee
 } = require("../models/EmployeeModel");
 
 async function getAllEmployees(req, res) {
@@ -19,8 +21,7 @@ async function getAllEmployees(req, res) {
 async function getEmployee(req, res) {
   const { id } = req.body;
   try {
-    const employees = await listAllEmployees();
-    const employee = employees.find((employee) => employee[0] === id);
+    const employee = await selectEmployee(id);
     res.json({ data: employee });
   } catch (err) {
     res
@@ -71,6 +72,16 @@ async function addEmployee(req, res){
   }
 }
 
+async function getBestEmployee(req, res){
+  try {
+    const result = await bestEmployee();
+    res.status(200).json({ data: result });
+  } catch (err) {
+    res
+      .status(400);
+  }
+}
+
 module.exports = {
   getAllEmployees,
   getEmployee,
@@ -78,4 +89,5 @@ module.exports = {
   findManagerInfo,
   allManagersInfo,
   addEmployee,
+  getBestEmployee,
 };

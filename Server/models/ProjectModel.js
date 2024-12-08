@@ -81,11 +81,62 @@ async function selectEmpProjects(employeeID) {
   }
 }
 
+async function UpdateAddProject(employeeID){
+  let conn;
+  oracledb.autoCommit = true;
+  try {
+    conn = await oracledb.getConnection();
 
+    const result = await conn.execute(
+      `
+      BEGIN
+        AssignEmployeeToProject(:emp_id);
+      END;
+      `, [employeeID]
+    );
+    return "success"
+  } catch (err) {
+    console.error("Error Adding employee's project:", err);
+    throw err; // Re-throw the error
+  } finally {
+    if (conn) {
+      await conn.close(); // Close the connection
+    }
+  }
+}
+
+async function InsertProject(ProjectDetes){
+  let conn;
+  oracledb.autoCommit = true;
+  try {
+    conn = await oracledb.getConnection();
+
+    const result = await conn.execute(
+      `
+      BEGIN
+        AddProject(:ProjectName, :managerID);
+      END;
+      `, {
+        ProjectName : ProjectDetes.projectName,
+        managerID : ProjectDetes.manager_id,
+      }
+    );
+    return "success"
+  } catch (err) {
+    console.error("Error Adding project:", err);
+    throw err; // Re-throw the error
+  } finally {
+    if (conn) {
+      await conn.close(); // Close the connection
+    }
+  }
+}
 
 module.exports = {
   listAllProjects,
   numProjects,
   listManagerProjects,
   selectEmpProjects,
+  UpdateAddProject,
+  InsertProject
 };

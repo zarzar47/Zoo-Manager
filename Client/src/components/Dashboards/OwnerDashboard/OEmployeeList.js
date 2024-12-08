@@ -4,7 +4,7 @@ import AddTaskModal from "../subComponents/AddTaskModal";
 import InfoModal from "../subComponents/InfoModal";
 import OEmployeeItem from "./OEmployeeItem";
 
-const OwnerEmployeeList = ({ employees }) => {
+const OwnerEmployeeList = ({ employees, bestID }) => {
   const [showModal, setShowModal] = useState(false); // Info modal visibility
   const [showAddTaskModal, setShowAddTaskModal] = useState(false); // Add Task modal visibility
   const [selectedEmployee, setSelectedEmployee] = useState(null); // Selected employee
@@ -23,13 +23,13 @@ const OwnerEmployeeList = ({ employees }) => {
       });
       if (response.ok) {
         const result = await response.json();
-        console.log(result)
         setTasks(result.data);
       } else {
         console.error("Failed to fetch tasks");
       }
+      
     } catch (error) {
-      console.error("Error fetching employee tasks:", error);
+      console.error("Error fetching employee");
     }
   };
 
@@ -62,6 +62,7 @@ const OwnerEmployeeList = ({ employees }) => {
           {employees.map((employee, index) => (
             <OEmployeeItem
               key={index}
+              bestID={bestID}
               employee={employee}
               onInfoClick={handleTaskClick}
               onAddTaskClick={openAddTaskModal}

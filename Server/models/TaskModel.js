@@ -94,7 +94,6 @@ async function ManagerTask(MANAGER_ID) {
 
     while ((row = await cursor.getRow())) {
       if (!row) {
-        console.log("No rows fetched, breaking loop");
         break; // Break the loop if no rows are fetched
       }
       tasks.push({
@@ -126,7 +125,6 @@ async function InsertTask(taskdetails)
   let conn;
   oracledb.autoCommit = true;
   try {
-    console.log(taskdetails)
     conn = await oracledb.getConnection();
     const result = await conn.execute(
       `BEGIN

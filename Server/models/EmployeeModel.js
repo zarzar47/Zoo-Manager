@@ -1,11 +1,30 @@
+const e = require("express");
 const oracledb = require("oracledb");
 
 async function listAllEmployees() { // this is kinda useless but good as a boilerplate
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT * FROM Employees`);
+    const result = await conn.execute(`
+      SELECT E.emp_id, E.name,E.Email,E.hire_date, M.name, E.project_id, E.phoneNum  
+      FROM Employees E 
+      inner join managers M USING (manager_id)`);
     return result.rows;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
+async function selectEmployee(emp_id) {
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(`SELECT * FROM Employees WHERE emp_id = '${emp_id}'`);
+    return result.rows[0];
   } catch (err) {
     throw err;
   } finally {
@@ -53,7 +72,7 @@ async function listManagerEmployees(id) { // this will work
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(
-      `SELECT emp_id, name, email, TO_CHAR(hire_date, 'YY-MM-DD') as hiredate, project_id, phoneNum
+      `SELECT emp_id, name, email, hire_date, project_id, phoneNum
        FROM employees where manager_id = ${id}`
     );
     return result.rows;
@@ -106,11 +125,32 @@ async function InsertEmployee(EmployeeDete){
   }
 }
 
+async function bestEmployee(){
+  let conn;
+  try {
+    conn = await oracledb.getConnection();
+    const result = await conn.execute(
+      `
+      SELECT GetBestEmployee() AS employee_id FROM dual
+      `
+    );
+    return result.rows[0]
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) {
+      await conn.close();
+    }
+  }
+}
+
 module.exports = {
   listAllEmployees,
   numEmployees,
   FindManager,
   listManagerEmployees,
   listManagerInfo,
-  InsertEmployee
+  InsertEmployee,
+  bestEmployee,
+  selectEmployee,
 };

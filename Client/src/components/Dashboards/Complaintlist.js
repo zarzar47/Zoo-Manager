@@ -43,13 +43,8 @@ const ComplaintList = ({ managerID }) => {
           body: JSON.stringify({ id: complaintID }),
         }
       );
-      if (response.ok) {
-        alert(`Complaint #${complaintID} resolved successfully!`);
-        // Remove the resolved complaint from the local state
-        setComplaints(complaints.filter((complaint) => complaint[0] !== complaintID));
-      } else {
-        alert("Failed to resolve complaint. Please try again.");
-      }
+      alert(`Complaint #${complaintID} resolved successfully!`);
+      setComplaints(complaints.filter((complaint) => complaint[0] !== complaintID));
     } catch (error) {
       console.error("Error resolving complaint:", error);
     }

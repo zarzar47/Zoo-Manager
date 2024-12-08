@@ -47,7 +47,6 @@ async function InsertComplaint(complaintDetes) { // boilerplate
 async function deleteComplaint(complaint_num){
   let conn;
   oracledb.autoCommit = true;
-  console.log("this is the complaint nubmer " +complaint_num)
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(`

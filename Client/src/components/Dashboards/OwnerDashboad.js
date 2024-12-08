@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import OwnerEmployeeList from "./OwnerDashboard/OEmployeeList";
-import ProjectList from "./ProjectList";
+import OProjectList from "./OwnerDashboard/OProjectList";
 import OwnerTaskList from "./OwnerDashboard/OTaskList";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -13,6 +13,7 @@ function OwnerDashboard() {
   const [taskData, setTaskData] = useState([]);
   const [ownerData, setrOwnerData] = useState({ id: 0, name: "", email: "" });
   const [loading, setLoading] = useState(true);
+  const [BestEmployee, setBestEmployee] = useState({id : 0});
   const location = useLocation();
   const userId = location.state?.userId;
   const navigate = useNavigate();
@@ -46,7 +47,6 @@ function OwnerDashboard() {
         });
       }
       const data = await response.json();
-      console.log(data)
       setrOwnerData(data.data)
     } catch (error) {
       console.error(`Error fetching Owner data data:`, error);
@@ -62,6 +62,7 @@ function OwnerDashboard() {
         fetchData("employees", setEmployeeData),
         fetchData("projects", setProjectData),
         fetchData("tasks", setTaskData),
+        fetchData("employees/Best",setBestEmployee)
       ]);
       setLoading(false);
     };
@@ -118,8 +119,8 @@ function OwnerDashboard() {
           {/* Projects */}
           <div className="col-12">
             <div className="shadow-lg rounded p-4 bg-light mb-4">
-              <h4 className="text-primary mb-3 text-center">Projects</h4>
-              <ProjectList Projects={projectData} />
+              <h4 className="text-primary mb-3 text-center mb-4">Projects</h4>
+              <OProjectList Projects={projectData} Managers = {managerData} />
             </div>
           </div>
           {/* Managers */}
@@ -133,7 +134,10 @@ function OwnerDashboard() {
           <div className="col">
             <div className="shadow-lg rounded p-4 bg-light mb-4">
               <h4 className="text-primary mb-3 text-center">Employees</h4>
-              <OwnerEmployeeList employees={employeeData} />
+              <OwnerEmployeeList 
+              employees={employeeData}
+              bestID={BestEmployee}
+               />
             </div>
           </div>
           <div className="col-md-6">
