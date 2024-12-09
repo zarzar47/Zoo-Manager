@@ -150,7 +150,6 @@ async function bestEmployee(){
 async function insertManager(ManagerDetes){
   let conn;
   oracledb.autoCommit = true;
-  console.log("Manager detes ",ManagerDetes)
   try {
     conn = await oracledb.getConnection();
     const result = await conn.execute(`
@@ -161,7 +160,6 @@ async function insertManager(ManagerDetes){
         Lname: ManagerDetes.name,
         Lemail: ManagerDetes.email,
       });
-    console.log("This going")
     return result;
   } catch (err) {
     throw err;

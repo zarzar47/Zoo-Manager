@@ -7,7 +7,6 @@ const TaskList = ({ Tasks }) => {
   const [selectedTask, setSelectedTask] = useState(null); // Task to edit
 
   const DeleteTask = async (TaskID) => {
-    console.log("This is the Task ID ", TaskID);
     try {
       const response = await fetch(`http://localhost:3001/api/RemoveTask`, {
         method: "POST",

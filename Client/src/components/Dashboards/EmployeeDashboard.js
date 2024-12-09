@@ -67,7 +67,6 @@ function EmployeeDashboard() {
 
       if (projectResponse.ok) {
         const projectInfo = await projectResponse.json();
-        console.log("This is the project information " +projectInfo.data)
         setProjects(projectInfo.data);
       }
 

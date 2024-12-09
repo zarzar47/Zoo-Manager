@@ -129,7 +129,6 @@ async function InsertProject(ProjectDetes){
   oracledb.autoCommit = true;
   try {
     conn = await oracledb.getConnection();
-    console.log("adding project")
     const result = await conn.execute(
       `
       BEGIN

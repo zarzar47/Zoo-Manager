@@ -26,7 +26,6 @@ async function AddComplaint(req, res) {
 
 async function RemoveComplaint(req, res) {
   const { id } = req.body
-  console.log("got here in the first place ", id)
   try {
     const result = await deleteComplaint(id);
     res.status(200);

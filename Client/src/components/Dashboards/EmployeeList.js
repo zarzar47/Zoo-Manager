@@ -23,7 +23,6 @@ const EmployeeList = ({ reserveData, employees }) => {
       });
       if (response.ok) {
         const result = await response.json();
-        console.log(result)
         setTasks(result.data);
       } else {
         console.error("Failed to fetch tasks");

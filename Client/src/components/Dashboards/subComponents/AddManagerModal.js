@@ -31,7 +31,6 @@ const AddManagerModal = ({ show, onClose, setManagers }) => {
         body: JSON.stringify(managerDetails),
       });
 
-      console.log(response)
       if (response.ok) {
         const newManager = await response.json();
         setManagerDetails((prevManagers) => [...prevManagers, newManager]);

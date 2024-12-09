@@ -85,10 +85,8 @@ async function getBestEmployee(req, res){
 
 async function addManager(req, res){
   const {name, email} = req.body
-  console.log("Detecting hit ", name, email)
   try {
     const result = await insertManager({name, email});
-    console.log("Sending saim back")
     res.status(200).json({data : "wow"});
   } catch (err) {
     res
