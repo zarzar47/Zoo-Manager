@@ -129,7 +129,7 @@ async function InsertProject(ProjectDetes){
   oracledb.autoCommit = true;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(
+    await conn.execute(
       `
       BEGIN
         AddProject(:ProjectName, :managerID);

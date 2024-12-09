@@ -147,25 +147,31 @@ async function bestEmployee(){
   }
 }
 
-async function insertManager(ManagerDetes){
+async function insertManager(ManagerDetes) {
   let conn;
-  oracledb.autoCommit = true;
+  oracledb.autoCommit = true; // auto commit setting
+
   try {
+    // Get the Oracle connection
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`
-      BEGIN
+
+    // Execute the anonymous PL/SQL block
+    const result = await conn.execute(
+      `BEGIN
         AddManager(:Lname, :Lemail);
-      END;
-      `,{
-        Lname: ManagerDetes.name,
-        Lemail: ManagerDetes.email,
-      });
-    return result;
+      END;`,
+      {
+        Lname: ManagerDetes.name, // bind the Manager name parameter
+        Lemail: ManagerDetes.email // bind the Manager email parameter
+      }
+    );
+    return "success";
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   } finally {
     if (conn) {
-      await conn.close();
+      await conn.close(); // Close the connection in finally block
     }
   }
 }

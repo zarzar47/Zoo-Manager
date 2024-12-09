@@ -89,8 +89,7 @@ async function addManager(req, res){
     const result = await insertManager({name, email});
     res.status(200).json({data : "wow"});
   } catch (err) {
-    res
-      .status(400);
+    res.status(400);
   }
 }
 

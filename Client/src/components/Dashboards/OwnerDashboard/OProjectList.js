@@ -21,15 +21,19 @@ const OwnerProjectList = ({ Managers, Projects, setProjects }) => {
     setLoading(true);
 
     try {
-      await fetch(`http://localhost:3001/api/Project/AddProject`, {
+      const response = await fetch(`http://localhost:3001/api/AddProject`, {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ projectName: newProjectName, manager_id: managerID }),
       });
+      if (response.ok){
       alert("Successfully added project data");
       setNewProjectName("");
       setManagerID(null);
+      } else {
+        alert("Something went wrong adding the project");
+      }
     } catch (error) {
       console.error(`Error adding project data:`, error);
     } finally {

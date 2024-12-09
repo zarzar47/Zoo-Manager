@@ -36,6 +36,7 @@ const AddManagerModal = ({ show, onClose, setManagers }) => {
         setManagerDetails((prevManagers) => [...prevManagers, newManager]);
         alert("Manager added successfully!");
         onClose(); // Close the modal
+        window.location.reload();
       } else {
         alert("Failed to add manager. Please try again.");
       }
