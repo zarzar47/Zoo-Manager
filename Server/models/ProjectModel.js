@@ -4,7 +4,11 @@ async function listAllProjects() { // this is kinda useless but good as a boiler
   let conn;
   try {
     conn = await oracledb.getConnection();
-    const result = await conn.execute(`SELECT ProjectDetail, TO_CHAR(StartDate, 'YYYY-MM-DD') as StartDate, TO_CHAR(estEndDate, 'YYYY-MM-DD') as estEndDate, Manager_id FROM projects`);
+    const result = await conn.execute(`SELECT ProjectDetail, 
+      TO_CHAR(StartDate, 'YYYY-MM-DD') as StartDate, 
+      TO_CHAR(estEndDate, 'YYYY-MM-DD') as estEndDate, 
+      M.name FROM projects P
+      inner join Managers M ON (M.manager_id = P.manager_id)`);
     return result.rows;
   } catch (err) {
     throw err;
@@ -125,7 +129,7 @@ async function InsertProject(ProjectDetes){
   oracledb.autoCommit = true;
   try {
     conn = await oracledb.getConnection();
-
+    console.log("adding project")
     const result = await conn.execute(
       `
       BEGIN

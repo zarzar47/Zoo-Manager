@@ -6,6 +6,7 @@ const {
   findManagerInfo,
   allManagersInfo,
   addEmployee,
+  addManager
 } = require("../controllers/employeeController");
 const { findManagedProjects } = require("../controllers/ProjectController");
 const { getManagerTasks } = require("../controllers/TaskController");
@@ -16,5 +17,6 @@ router.post("/tasks", getManagerTasks);
 router.post("/", findManagerInfo);
 router.get("/all", allManagersInfo);
 router.post("/AddEmployee", addEmployee);
+router.post("/AddManager", addManager);
 
 module.exports = router;

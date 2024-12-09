@@ -126,8 +126,21 @@ BEGIN
     INSERT INTO Employees (name, email, Manager_ID,hire_date, Project_id, phoneNum)
     VALUES (p_name, p_email, p_Manager_ID,SYSDATE, null, p_phoneNum);
 END AddingEmployees;
-/
 
+/
+create or replace PROCEDURE AddManager(
+    p_Name        IN VARCHAR2,
+    p_Email       IN VARCHAR2
+) AS
+    v_Exists NUMBER;
+BEGIN
+    -- Insert the new manager into the Managers table
+    INSERT INTO Managers (Name, email, hire_date)
+    VALUES (p_Name, p_Email, SYSDATE);
+
+END;
+
+/
 create or replace PROCEDURE CompletingTasks (
     p_TaskID NUMBER
 ) AS
@@ -165,7 +178,7 @@ END;
 
 /
 
-CREATE OR REPLACE PROCEDURE FiringManagers (
+create or replace PROCEDURE FiringManagers (
     p_ManagerID NUMBER
 ) AS
 BEGIN
@@ -179,8 +192,11 @@ BEGIN
 
     DELETE FROM Managers
     WHERE Manager_id = p_ManagerID;
-
+    
+    DELETE FROM LOGINDATABASE
+    WHERE DATA_ID = p_ManagerID;
 END;
+
 /
 
 create or replace PROCEDURE LogComplaint (

@@ -7,8 +7,10 @@ const OwnerProjectList = ({ Managers, Projects, setProjects }) => {
   const [loading, setLoading] = useState(false);
 
   const availableManagers = Managers.filter(
-    (manager) => Projects.some((project) => project[4] === manager[0])
-  );
+    (manager) => {
+      const assignedProject = Projects.some((project) => project[3] === manager[1]);
+      return !assignedProject;
+    })
 
   const handleAddProject = async () => {
     if (!newProjectName.trim() || !managerID) {
@@ -79,6 +81,7 @@ const OwnerProjectList = ({ Managers, Projects, setProjects }) => {
                 <h5 className="mb-1">{Project[0]}</h5>
                 <p className="mb-1">Time Created: {Project[1]}</p>
                 <p className="mb-1">Completion Date: {Project[2]}</p>
+                <p className="mb-1">Assigned to manager: {Project[3]}</p>
                 <div className="progress">
                   <div
                     className="progress-bar"

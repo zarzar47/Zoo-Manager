@@ -86,7 +86,7 @@ function ManagerDashboard() {
           </p>
         </div>
       </div>
-
+            
       <div className="shadow-lg rounded p-4 bg-light mb-4">
         <h4 className="text-primary">Projects</h4>
         <ProjectList Projects={projectData} />

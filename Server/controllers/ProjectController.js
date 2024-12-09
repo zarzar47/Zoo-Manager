@@ -54,7 +54,7 @@ async function AddProject(req, res){
   const { projectName, manager_id } = req.body;
   try {
     const projects = await InsertProject({projectName, manager_id});
-    res.status(200);
+    res.status(200).json({data : "success"});
   } catch (err) {
     res
       .status(500);
